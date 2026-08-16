@@ -3,22 +3,9 @@ name: to-docs
 description: Analyze decisions made during implementation, review, or design work and distinguish project-wide guidance from route-specific fixes, already-documented rules, and premature patterns. Use when the user asks which lessons or decisions deserve inclusion in project documentation, wants to review proposed guidelines before approving documentation changes, or asks to update project guidance from recent work.
 ---
 
-# Distill project guidelines
+# To Docs
 
 Turn recent work into durable guidance without treating the session as a changelog.
-
-## Required skill
-
-Writing project documentation requires the `writing-for-agents` skill from
-`mattpocock/skills`. Phase 1 may run without it, but do not start Phase 2 unless
-it is available.
-
-If `writing-for-agents` is unavailable, stop after the approved proposal and ask
-the user to install it with:
-
-```bash
-npx skills@latest add mattpocock/skills --skill writing-for-agents
-```
 
 ## Phase 1: Propose
 
@@ -59,7 +46,8 @@ Prefer modifying an existing authoritative document over creating a new one. Avo
 After explicit approval:
 
 1. Invoke `writing-for-agents` and apply its writing discipline throughout this
-   phase. Do not duplicate or restate its guidance here.
+   phase. If it is unavailable, stop and ask the user to install it with
+   `npx skills@latest add mattpocock/skills --skill writing-for-agents`.
 2. Re-read every affected document before editing it.
 3. Apply only the approved rules and preserve the repository's terminology and language requirements.
 4. Reconcile the full documentation set: remove obsolete guidance, resolve contradictions, and update cross-references.

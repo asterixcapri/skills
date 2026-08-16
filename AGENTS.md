@@ -9,6 +9,10 @@ This repository publishes agent skills through skills.sh.
   `name`.
 - Keep third-party skills installed for this project in `.agents/skills/`; do
   not publish them from `skills/`.
+- For an installable skill dependency invoked at runtime, check availability at
+  the first step that needs it. If neither it nor an accepted equivalent is
+  available, stop before the dependent action and give the exact installation
+  command; keep earlier independent steps runnable.
 
 ## Documentation
 

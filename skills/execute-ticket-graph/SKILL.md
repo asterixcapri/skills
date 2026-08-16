@@ -105,8 +105,10 @@ explicitly allow them.
 
 Launch all selected subagents before waiting for any result. Start every subagent
 with a fresh context. Resolve the project's exact skill name first, then make the
-invocation itself the first line of this packet. For the standard skill, render the
-first line exactly as shown:
+invocation itself the first line of this packet. If no `implement` skill or
+equivalent is available, stop before launch and ask the user to install the standard
+skill with `npx skills@latest add mattpocock/skills --skill implement`. For the
+standard skill, render the first line exactly as shown:
 
 ```text
 Use $implement to implement exactly this ticket: <exact title> (<tracker reference>; id: <exact id>).
