@@ -57,6 +57,8 @@ Matt Pocock skills:
 - `to-tickets` produces the dependency graph consumed by this skill.
 - `implement` executes each ticket selected from the graph.
 
+---
+
 ### `to-docs`
 
 Turn decisions made during implementation, review, or design work into durable
@@ -99,6 +101,8 @@ npx skills@latest add asterixcapri/skills --skill to-docs
 Matt Pocock skill:
 
 - `writing-for-agents` writes the approved documentation changes.
+
+---
 
 ## Discover skills
 
