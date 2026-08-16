@@ -8,14 +8,17 @@ coding agents.
 
 ### `execute-ticket-graph`
 
-Execute implementation tickets as a validated dependency graph. The skill claims
-the executable frontier, delegates independent tickets concurrently in isolated Git
-worktrees, integrates successful commits serially, verifies the combined result,
-and then releases downstream tickets.
+Read the dependency graph written by `to-tickets` and execute every implementation
+ticket in the right order. For each ready ticket, the skill launches a fresh
+subagent that invokes `implement`. Independent tickets run in parallel within the
+applicable parallelism directives; dependent tickets wait until their blockers are
+integrated and verified.
 
-Use `execute-ticket-graph` when an implementation effort contains multiple tickets
-with blocking relationships and the project already defines its ticket-tracker and
-single-ticket implementation workflows.
+The skill repeats this process frontier by frontier, integrating successful commits
+serially and verifying the combined result before releasing downstream tickets. Use
+it when an implementation effort contains multiple tickets with blocking
+relationships and the project already defines its ticket-tracker and `implement`
+workflows.
 
 [View the skill](skills/execute-ticket-graph/SKILL.md)
 

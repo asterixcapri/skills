@@ -1,13 +1,15 @@
 ---
 name: execute-ticket-graph
-description: Execute implementation tickets as a validated dependency graph across any project-configured ticket system. Use when a multi-ticket spec or effort—especially one produced by `to-tickets`—has blocking edges and the host agent should claim the executable frontier, run independent `implement` workers concurrently in isolated Git worktrees, integrate successful commits serially, verify the combined state, and then release downstream tickets. Do not use for a single ticket or for Wayfinder decision maps.
+description: Read implementation-ticket dependency graphs produced by `to-tickets` and execute them in dependency order across any project-configured ticket system. Use when a multi-ticket effort has blocking edges and the host agent should claim each executable frontier, launch one fresh subagent per ticket to invoke `implement`, run independent tickets in parallel within the applicable parallelism directives, integrate successful commits serially, verify the combined state, and then release downstream tickets. Do not use for a single ticket or for Wayfinder decision maps.
 ---
 
 # Execute Ticket Graph
 
-Add graph execution to an existing ticket workflow. Keep ticket storage behind the
-project's configured tracker contract and keep single-ticket implementation behind
-the project's `implement` skill or equivalent.
+Consume the ticket dependency graph written by `to-tickets`. Repeatedly select the
+executable frontier, launch one fresh subagent per ticket, and require each subagent
+to invoke the project's `implement` skill or equivalent. Run independent tickets in
+parallel and hold dependent tickets until their blockers integrate and pass
+verification.
 
 ## Preserve the seams
 
@@ -23,7 +25,7 @@ the project's `implement` skill or equivalent.
   this `SKILL.md`, then run
   `node <skill-path>/scripts/inspect-graph.mjs <snapshot.json> --rounds` against the
   canonical shape in [references/tracker-contract.md](references/tracker-contract.md).
-- Delegate exactly one ticket to each worker. Require that worker to invoke the
+- Delegate exactly one ticket to each subagent. Require that subagent to invoke the
   existing `implement` skill or the project's documented equivalent.
 - Do not use this workflow to execute a Wayfinder map. Wayfinder tickets resolve
   decisions; implementation tickets deliver code.
@@ -36,7 +38,9 @@ Resolve these values from repository instructions, tracker documentation, or the
 user's invocation:
 
 - effort reference and ticket scope;
-- maximum concurrency, defaulting to `2`;
+- maximum concurrency from the applicable user, repository, and host-agent
+  parallelism directives, defaulting to `2` when none is specified and never
+  exceeding the available subagent slots;
 - eligible, claimed, failed, and blocker-satisfied meanings;
 - atomic claim operation and claim ownership evidence;
 - integration target, worktree parent directory, and branch naming convention;
@@ -92,10 +96,10 @@ Restore dependencies inside each worktree as the repository requires. Copy no
 secrets, ignored files, or dirty-checkout contents unless repository instructions
 explicitly allow them.
 
-### 5. Fan out
+### 5. Fan out to `implement`
 
-Launch all selected workers before waiting for any worker. Start every worker with a
-fresh context and give it this packet:
+Launch all selected subagents before waiting for any result. Start every subagent
+with a fresh context and give it this packet:
 
 ```text
 Ticket: <tracker reference and exact id>
@@ -108,7 +112,7 @@ Verification: <project commands>
 Completion report: outcome, commit, verification, dirty state, blockers
 ```
 
-Tell each worker to reconstruct context from repository instructions, the assigned
+Tell each subagent to reconstruct context from repository instructions, the assigned
 ticket and comments, its parent spec, domain and architecture docs, and relevant
 code. Tell it not to select or update any other ticket.
 
