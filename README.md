@@ -44,6 +44,19 @@ with blocking relationships and the project already defines its ticket-tracker a
 
 [View the skill](skills/execute-ticket-graph/SKILL.md)
 
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill execute-ticket-graph
+```
+
+#### Dependencies
+
+Matt Pocock skills:
+
+- `to-tickets` produces the dependency graph consumed by this skill.
+- `implement` executes each ticket selected from the graph.
+
 ### `to-docs`
 
 Turn decisions made during implementation, review, or design work into durable
@@ -75,29 +88,19 @@ at all.
 
 [View the skill](skills/to-docs/SKILL.md)
 
-## Installation
-
-### `execute-ticket-graph`
-
-```bash
-npx skills@latest add asterixcapri/skills --skill execute-ticket-graph
-```
-
-### `to-docs`
-
-During its apply phase, `to-docs` invokes Matt Pocock's `writing-for-agents`
-skill to write the approved documentation changes. Install that dependency
-first:
-
-```bash
-npx skills@latest add mattpocock/skills --skill writing-for-agents
-```
-
-Then install `to-docs`:
+#### Installation
 
 ```bash
 npx skills@latest add asterixcapri/skills --skill to-docs
 ```
+
+#### Dependencies
+
+Matt Pocock skill:
+
+- `writing-for-agents` writes the approved documentation changes.
+
+## Discover skills
 
 List the skills published by this repository without installing them:
 
