@@ -8,17 +8,39 @@ coding agents.
 
 ### `execute-ticket-graph`
 
-Read the dependency graph written by `to-tickets` and execute every implementation
-ticket in the right order. For each ready ticket, the skill launches a fresh
-subagent that invokes `implement`. Independent tickets run in parallel within the
-applicable parallelism directives; dependent tickets wait until their blockers are
-integrated and verified.
+Turn the dependency graph written by `to-tickets` into an implementation run. The
+skill reads every ticket and its blockers, calculates which tickets are ready, and
+launches one fresh subagent for each ready ticket. Every subagent invokes the
+project's existing `implement` workflow for exactly one ticket.
 
-The skill repeats this process frontier by frontier, integrating successful commits
-serially and verifying the combined result before releasing downstream tickets. Use
-it when an implementation effort contains multiple tickets with blocking
-relationships and the project already defines its ticket-tracker and `implement`
-workflows.
+Independent tickets run concurrently in isolated Git worktrees, up to the
+parallelism limit defined by the user, repository, and host agent. Tickets with
+unresolved blockers wait. When a subagent finishes, the skill collects its verified
+commit, integrates successful commits serially, verifies their combined state, and
+only then releases the next group of tickets.
+
+For example, given this graph:
+
+```text
+A ──┬──> B ──┐
+    └──> C ──┴──> D
+```
+
+the skill runs the tickets in three rounds:
+
+1. Run `implement` for A.
+2. After A integrates and passes verification, run `implement` for B and C in
+   parallel subagents.
+3. After both B and C integrate and pass verification, run `implement` for D.
+
+After each round, the skill rereads the ticket system and recomputes the executable
+frontier instead of assuming that the graph is unchanged. Claims, failures, merge
+conflicts, and verification failures remain visible rather than incorrectly
+unlocking downstream work.
+
+Use `execute-ticket-graph` when an implementation effort contains multiple tickets
+with blocking relationships and the project already defines its ticket-tracker and
+`implement` workflows.
 
 [View the skill](skills/execute-ticket-graph/SKILL.md)
 
