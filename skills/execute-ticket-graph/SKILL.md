@@ -25,8 +25,9 @@ verification.
   this `SKILL.md`, then run
   `node <skill-path>/scripts/inspect-graph.mjs <snapshot.json> --rounds` against the
   canonical shape in [references/tracker-contract.md](references/tracker-contract.md).
-- Delegate exactly one ticket to each subagent. Require that subagent to invoke the
-  existing `implement` skill or the project's documented equivalent.
+- Delegate exactly one ticket to each subagent. Put the explicit `implement`
+  invocation, including the exact ticket title and reference, in the first line of
+  the subagent task. A prose instruction to invoke it later is not an invocation.
 - Do not use this workflow to execute a Wayfinder map. Wayfinder tickets resolve
   decisions; implementation tickets deliver code.
 
@@ -45,11 +46,11 @@ user's invocation:
 - atomic claim operation and claim ownership evidence;
 - integration target, worktree parent directory, and branch naming convention;
 - dependency restoration needed in a fresh worktree;
-- verification required from each worker before collection;
+- verification required from each subagent before collection;
 - fast verification after each integration and full verification after fan-in;
 - integration mode, defaulting to supervised;
 - retry limit, defaulting to `0`;
-- whether a successful sibling may integrate when another worker fails, defaulting
+- whether a successful sibling may integrate when another subagent fails, defaulting
   to yes after the supervised integration checkpoint.
 
 Do not invent a state-changing tracker operation. Stop before fan-out if exclusive
@@ -62,7 +63,7 @@ Fetch enough data to determine identity, title, reference, execution state, and 
 incoming blocking edges. Map the results to a canonical snapshot without changing
 the tracker.
 
-Validate the snapshot with `scripts/inspect-graph.mjs`. Do not launch workers if an
+Validate the snapshot with `scripts/inspect-graph.mjs`. Do not launch subagents if an
 identity is duplicated, a blocker is missing, an edge is malformed, or the graph is
 cyclic.
 
@@ -79,7 +80,7 @@ Perform no writes during a dry run.
 ### 3. Claim one frontier
 
 Select eligible frontier tickets up to the concurrency cap. Claim every selected
-ticket before launching any worker, using the tracker-specific exclusive claim
+ticket before launching any subagent, using the tracker-specific exclusive claim
 operation. Record claim ownership evidence for the run.
 
 After claiming, reread each selected ticket. Launch it only if the claim still belongs
@@ -99,36 +100,41 @@ explicitly allow them.
 ### 5. Fan out to `implement`
 
 Launch all selected subagents before waiting for any result. Start every subagent
-with a fresh context and give it this packet:
+with a fresh context. Resolve the project's exact skill name first, then make the
+invocation itself the first line of this packet. For the standard skill, render the
+first line exactly as shown:
 
 ```text
-Ticket: <tracker reference and exact id>
+Use $implement to implement exactly this ticket: <exact title> (<tracker reference>; id: <exact id>).
 Parent spec/effort: <reference>
 Worktree: <absolute path>
 Branch: <branch>
 Base commit: <commit>
-Required workflow: invoke the project's implement skill or documented equivalent
 Verification: <project commands>
 Completion report: outcome, commit, verification, dirty state, blockers
 ```
 
 Tell each subagent to reconstruct context from repository instructions, the assigned
 ticket and comments, its parent spec, domain and architecture docs, and relevant
-code. Tell it not to select or update any other ticket.
+code. Tell it not to select or update any other ticket. Let `implement` own its
+ticket-level completion rules, including stories and acceptance criteria; do not
+restate or replace them in this orchestration skill.
 
 ### 6. Collect
 
-Wait for every worker in the frontier. Preserve successful sibling results when one
-worker fails. Accept a worker for integration only when it:
+Wait for every subagent in the frontier. Preserve successful sibling results when one
+subagent fails. Treat the invoked `implement` workflow as the authority on whether its
+ticket-level work is complete. Accept its result for integration only when the
+orchestration envelope also confirms that it:
 
-- implemented its assigned ticket and no other ticket;
+- completed the explicitly invoked `implement` workflow for its assigned ticket;
 - produced a commit on its assigned branch;
-- passed the required worker verification;
+- passed the required subagent verification;
 - left no unexplained dirty state;
 - reported the exact commit hash.
 
 Record failed or escalated outcomes through the tracker contract. Never translate a
-stopped worker into a resolved ticket.
+stopped subagent into a resolved ticket.
 
 ### 7. Fan in serially
 
