@@ -33,10 +33,11 @@ the skill runs the tickets in three rounds:
    parallel subagents.
 3. After both B and C integrate and pass verification, run `implement` for D.
 
-After each round, the skill rereads the ticket system and recomputes the executable
-frontier instead of assuming that the graph is unchanged. Claims, failures, merge
-conflicts, and verification failures remain visible rather than incorrectly
-unlocking downstream work.
+`implement` remains the sole owner of each ticket's lifecycle, including claims,
+acceptance criteria, failures, and completion. The graph skill introduces no status
+convention of its own. After each round, it rereads the ticket system and recomputes
+the executable frontier instead of assuming that the graph is unchanged. Merge or
+verification failures keep downstream work blocked.
 
 Use `execute-ticket-graph` when an implementation effort contains multiple tickets
 with blocking relationships and the project already defines its ticket-tracker and

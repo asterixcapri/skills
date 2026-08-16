@@ -1,6 +1,6 @@
 ---
 name: execute-ticket-graph
-description: Read implementation-ticket dependency graphs produced by `to-tickets` and execute them in dependency order across any project-configured ticket system. Use when a multi-ticket effort has blocking edges and the host agent should claim each executable frontier, launch one fresh subagent per ticket to invoke `implement`, run independent tickets in parallel within the applicable parallelism directives, integrate successful commits serially, verify the combined state, and then release downstream tickets. Do not use for a single ticket or for Wayfinder decision maps.
+description: Read implementation-ticket dependency graphs produced by `to-tickets` and execute them in dependency order across any project-configured ticket system. Use when a multi-ticket effort has blocking edges and the host agent should compute each executable frontier, launch one fresh subagent per ticket with an explicit `implement` invocation, let `implement` own the ticket lifecycle, run independent tickets in parallel within the applicable parallelism directives, integrate successful commits serially, verify the combined state, and then release downstream tickets. Do not use for a single ticket or for Wayfinder decision maps.
 ---
 
 # Execute Ticket Graph
@@ -14,11 +14,14 @@ verification.
 ## Preserve the seams
 
 - Treat the configured ticket system as the source of truth for ticket identity,
-  state, blocking edges, claims, comments, and completion.
-- Read `docs/agents/issue-tracker.md` and repository instructions before querying or
-  mutating tickets. If the tracker contract is incomplete, read
+  state, blocking edges, and comments.
+- Keep every ticket-lifecycle mutation behind `implement`: claim, acceptance-criteria
+  updates, failure handling, and completion. This orchestrator reads those states but
+  never writes or redefines them.
+- Read `docs/agents/issue-tracker.md` and repository instructions before querying
+  tickets. If the tracker contract is incomplete, read
   [references/tracker-contract.md](references/tracker-contract.md) and settle only
-  the missing operations before continuing.
+  the missing read operations before continuing.
 - Never require local Markdown when the project uses GitHub, GitLab, Linear, Jira,
   or another system.
 - Normalize tracker data before graph computation. Resolve resource paths relative to
@@ -42,8 +45,8 @@ user's invocation:
 - maximum concurrency from the applicable user, repository, and host-agent
   parallelism directives, defaulting to `2` when none is specified and never
   exceeding the available subagent slots;
-- eligible, claimed, failed, and blocker-satisfied meanings;
-- atomic claim operation and claim ownership evidence;
+- eligible, in-progress, failed, and blocker-satisfied meanings for read-only
+  scheduling;
 - integration target, worktree parent directory, and branch naming convention;
 - dependency restoration needed in a fresh worktree;
 - verification required from each subagent before collection;
@@ -53,8 +56,8 @@ user's invocation:
 - whether a successful sibling may integrate when another subagent fails, defaulting
   to yes after the supervised integration checkpoint.
 
-Do not invent a state-changing tracker operation. Stop before fan-out if exclusive
-claiming or blocker satisfaction cannot be determined.
+Stop before fan-out only when the available reads cannot determine eligibility or
+blocker satisfaction. Do not invent a state-changing tracker operation.
 
 ### 2. Discover and normalize
 
@@ -70,22 +73,23 @@ cyclic.
 For a dry run, print:
 
 - the current frontier and simulated rounds;
-- ticket-to-worker assignments;
-- proposed claim operations;
+- ticket-to-subagent assignments;
+- the exact `$implement` invocation for each assignment;
 - base commit, branch names, and worktree paths;
 - verification and integration commands.
 
 Perform no writes during a dry run.
 
-### 3. Claim one frontier
+### 3. Select one frontier
 
-Select eligible frontier tickets up to the concurrency cap. Claim every selected
-ticket before launching any subagent, using the tracker-specific exclusive claim
-operation. Record claim ownership evidence for the run.
+Select eligible frontier tickets up to the concurrency cap. Assign every selected
+ticket once in the run-local schedule, then reread it immediately before launch.
+Launch it only while it remains eligible and its blockers remain satisfied.
 
-After claiming, reread each selected ticket. Launch it only if the claim still belongs
-to this run and its blockers remain satisfied. If acquisition is only process-local,
-state that limitation; do not claim safety across machines.
+Make no tracker write here. The explicitly invoked `implement` workflow owns the
+claim and every later lifecycle transition. If another run takes the ticket between
+selection and launch, let `implement` detect and report that outcome, then reread the
+tracker before recomputing the frontier.
 
 ### 4. Isolate writes
 
@@ -133,8 +137,9 @@ orchestration envelope also confirms that it:
 - left no unexplained dirty state;
 - reported the exact commit hash.
 
-Record failed or escalated outcomes through the tracker contract. Never translate a
-stopped subagent into a resolved ticket.
+Never translate a stopped subagent into a resolved ticket. Make no lifecycle update;
+reread the result written by `implement` and report any failure or escalation it
+left behind.
 
 ### 7. Fan in serially
 
@@ -146,25 +151,29 @@ On conflict, stop automatic integration or invoke the project's explicit
 merge-conflict workflow. Do not guess between competing intent.
 
 After all selected commits integrate, run the full verification suite against their
-combined state. Mark a ticket complete in the tracker only after its commit is in the
-integration branch and all required gates pass. Leave failed and non-integrated
-tickets visibly unresolved.
+combined state. Do not mark tickets complete or repair their lifecycle state here;
+that remains owned by `implement`. Record locally which commits integrated and which
+gates passed. If the tracker does not reflect the expected terminal result, report
+the discrepancy and keep downstream tickets blocked.
 
 ### 8. Recompute
 
 Reread the tracker rather than mutating the old snapshot. Normalize and validate the
-new graph, then compute the next frontier. Start another fan-out only after the
-previous fan-in completes.
+new graph, then compute the next frontier. For a ticket executed in this run, satisfy
+its downstream edges only when both the tracker reports the state produced by
+`implement` and its commit is integrated with all required gates passing. Start
+another fan-out only after the previous fan-in completes.
 
 Stop when all scoped tickets are resolved or the graph has no executable frontier.
 For a stalled graph, report each unresolved ticket, its state, and the blockers or
-claims preventing execution.
+in-progress assignments preventing execution.
 
 ## Safety invariants
 
-- Persist claims before worker launch.
+- Assign each selected ticket to exactly one `implement` subagent in the run.
 - Use one worktree and branch per concurrent writer.
-- Use one writer for integration and tracker completion transitions.
+- Use one writer for integration.
+- Leave all ticket-lifecycle writes to the assigned `implement` workflow.
 - Never stage or commit unrelated changes from the user's checkout.
 - Resolve exact branch and worktree paths before cleanup; never make cleanup part of
   a success assumption.

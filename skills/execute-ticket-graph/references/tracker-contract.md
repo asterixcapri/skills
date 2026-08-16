@@ -1,7 +1,8 @@
-# Tracker contract
+# Tracker read contract
 
-Use the project's configured ticket system through semantic operations. The backing
-system may be local files, GitHub, GitLab, Linear, Jira, or another tracker.
+Read the project's configured ticket system through semantic operations. The backing
+system may be local files, GitHub, GitLab, Linear, Jira, or another tracker. Keep
+ticket-lifecycle writes behind the project's `implement` workflow.
 
 ## Required operations
 
@@ -12,24 +13,25 @@ unambiguous for implementation-ticket graphs:
 | --- | --- |
 | Scope | Resolve an effort reference to exactly its implementation tickets. |
 | List | Return ticket identities and stable references in that scope. |
-| Fetch | Read title, body, comments, state, claim owner, and blocking edges. |
+| Fetch | Read title, body, comments, execution state, and blocking edges. |
 | Eligible | Decide whether a ticket may be executed by an agent. |
 | Blockers | Resolve every `blocked by` edge to a stable ticket identity. |
 | Satisfied | Decide whether a blocker has reached the required terminal state. |
-| Claim | Acquire the ticket only if it is unclaimed and return ownership evidence. |
-| Recheck | Confirm that the claim is still owned immediately before worker launch. |
-| Fail/release | Record failure or release a claim without reporting completion. |
-| Complete | Transition a ticket only after integration and required verification. |
-| Report | Append worker and integration outcomes without replacing ticket history. |
 
 Prefer native dependency, assignment, and state features. Use a documented body or
 metadata convention only when the tracker lacks a native feature.
 
-An assignee is a sufficient claim only when concurrent orchestrators can distinguish
-ownership and acquisition is exclusive. If two runs use the same account, add a
-run-specific token or use a stronger lock. If the backend cannot compare-and-set,
-serialize acquisition behind a documented scheduler lock and state whether the lock
-is process-local, repository-local, or shared across machines.
+## Keep lifecycle ownership with `implement`
+
+Pass the exact ticket title and reference to an explicit `implement` invocation.
+Allow that workflow to claim the ticket, update its stories and acceptance criteria,
+record failure, and mark completion according to the project tracker instructions.
+The graph orchestrator performs none of those writes and introduces no replacement
+status convention.
+
+After each subagent result and serial integration, reread the tracker. For tickets
+executed in the current run, require both the terminal tracker state and successful
+integration before satisfying downstream blockers.
 
 ## Keep state vocabularies separate
 
@@ -38,8 +40,8 @@ Map backend strings to meanings; do not impose one universal list of labels.
 - `ready-for-agent` is commonly an eligibility/triage role.
 - `claimed` or an assignee represents execution ownership.
 - `closed`, `done`, or `resolved` commonly satisfies a blocker.
-- Worker success is not ticket completion. Completion occurs after serial integration
-  and the required gates.
+- A terminal tracker state written by `implement` releases downstream work only after
+  that ticket's commit is also integrated and the required gates pass.
 - `ready-for-human` may mean escalation or review in one project and something else
   in another. Consult the project mapping.
 
@@ -87,16 +89,16 @@ Require unique non-empty string ids, non-empty references and titles, and a
 `blockedBy` array of ids. Preserve backend-specific fields under an optional
 `metadata` object; never use them for core graph computation.
 
-## Typical mappings
+## Typical reads
 
 These are examples, not defaults:
 
-| Backend | Edge | Claim | Satisfied blocker |
-| --- | --- | --- | --- |
-| Local Markdown | `Blocked by` field | atomic repository lock plus recorded status/token | recorded `resolved` state |
-| GitHub | native dependency or body fallback | assignment plus run token/lock | closed issue |
-| GitLab | native blocking link or body fallback | assignment plus run token/lock | closed issue |
-| Linear/Jira | configured relation | configured exclusive assignment/lease | configured terminal workflow state |
+| Backend | Edge | Execution state |
+| --- | --- | --- |
+| Local Markdown | `Blocked by` field | configured `Status` value |
+| GitHub | native dependency or body fallback | issue state, labels, and assignee |
+| GitLab | native blocking link or body fallback | issue state, labels, and assignee |
+| Linear/Jira | configured relation | configured workflow state and assignee |
 
 If the tracker document does not define a required read operation, infer it only when
 the result is read-only and verifiable. Never infer state-changing operations.
