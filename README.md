@@ -6,6 +6,19 @@ coding agents.
 
 ## Available skills
 
+### `execute-ticket-graph`
+
+Execute implementation tickets as a validated dependency graph. The skill claims
+the executable frontier, delegates independent tickets concurrently in isolated Git
+worktrees, integrates successful commits serially, verifies the combined result,
+and then releases downstream tickets.
+
+Use `execute-ticket-graph` when an implementation effort contains multiple tickets
+with blocking relationships and the project already defines its ticket-tracker and
+single-ticket implementation workflows.
+
+[View the skill](skills/execute-ticket-graph/SKILL.md)
+
 ### `to-docs`
 
 Turn decisions made during implementation, review, or design work into durable
@@ -38,6 +51,12 @@ at all.
 [View the skill](skills/to-docs/SKILL.md)
 
 ## Installation
+
+### `execute-ticket-graph`
+
+```bash
+npx skills@latest add asterixcapri/skills --skill execute-ticket-graph
+```
 
 ### `to-docs`
 

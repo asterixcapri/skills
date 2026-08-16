@@ -1,0 +1,4 @@
+interface:
+  display_name: "Execute Ticket Graph"
+  short_description: "Execute dependency-aware tickets safely"
+  default_prompt: "Use $execute-ticket-graph to execute this effort by dependency frontier."
