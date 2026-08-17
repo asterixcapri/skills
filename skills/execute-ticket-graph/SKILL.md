@@ -51,10 +51,10 @@ user's invocation:
 - dependency restoration needed in a fresh worktree;
 - verification required from each subagent before collection;
 - fast verification after each integration and full verification after fan-in;
-- integration mode, defaulting to supervised;
+- integration mode, defaulting to automatic;
 - retry limit, defaulting to `0`;
 - whether a successful sibling may integrate when another subagent fails, defaulting
-  to yes after the supervised integration checkpoint.
+  to yes when the sibling is independently eligible.
 
 Stop before fan-out only when the available reads cannot determine eligibility or
 blocker satisfaction. Do not invent a state-changing tracker operation.
@@ -145,12 +145,17 @@ left behind.
 
 ### 7. Fan in serially
 
-Keep the main checkout single-writer. At the supervised checkpoint, present the
-eligible commits and failed siblings. Integrate successful commits one at a time in a
-deterministic order, running the fast gate after each integration.
+Keep the main checkout single-writer. Treat the graph-execution invocation as
+authorization to integrate eligible commits: proceed without an approval checkpoint.
+Integrate successful commits one at a time in a deterministic order, running the fast
+gate after each integration. Report failed siblings while continuing to integrate
+independently eligible successful siblings.
 
-On conflict, stop automatic integration or invoke the project's explicit
-merge-conflict workflow. Do not guess between competing intent.
+Ask for user intervention only when integration encounters a problem that the
+repository's documented workflows cannot resolve safely, such as a merge conflict,
+an ambiguous target, a failed gate, or unexpected dirty state. Invoke the project's
+explicit merge-conflict workflow when available; do not guess between competing
+intent.
 
 After all selected commits integrate, run the full verification suite against their
 combined state. Do not mark tickets complete or repair their lifecycle state here;
