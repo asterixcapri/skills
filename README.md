@@ -10,8 +10,10 @@ coding agents.
 
 Turn the dependency graph written by `to-tickets` into an implementation run. The
 skill reads every ticket and its blockers, calculates which tickets are ready, and
-launches one fresh subagent for each ready ticket. Each subagent implements exactly
-one ticket and owns that ticket's lifecycle.
+launches one fresh subagent for each ready ticket. Each subagent receives a
+self-contained mandate — claim the ticket, work test-first, typecheck and test as it
+goes, review its own diff, commit, and record the outcome on the ticket — so the run
+depends on no skill it might be unable to invoke.
 
 Independent tickets run concurrently in isolated Git worktrees, up to the
 parallelism limit defined by the user, repository, and host agent. Tickets with
