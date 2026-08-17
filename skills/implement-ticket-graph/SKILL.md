@@ -1,6 +1,7 @@
 ---
 name: implement-ticket-graph
 description: Read implementation-ticket dependency graphs produced by `to-tickets` and implement them in dependency order across any project-configured ticket system. Use when a multi-ticket effort has blocking edges and the host agent should compute each executable frontier, launch one fresh subagent per ticket, run independent tickets in parallel within the applicable parallelism directives, integrate successful commits serially, verify the combined state, and then release downstream tickets. Do not use for a single ticket or for Wayfinder decision maps.
+disable-model-invocation: true
 ---
 
 # Implement Ticket Graph
