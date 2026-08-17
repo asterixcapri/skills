@@ -102,20 +102,27 @@ Base commit: <commit>
 Verification: <project commands>
 Completion report: outcome, commit, verification, dirty state, blockers
 
-Claim the ticket before writing code. Work test-first at pre-agreed seams. Typecheck
-and run the touched tests often; run the full suite once at the end. Review the diff
-against the ticket and the repository's coding standards, then commit to the branch
-above. Record acceptance criteria and final ticket state from what you observed:
-report failure rather than closing work that did not pass verification.
+Claim the ticket before writing code.
+
+Use $tdd where possible, at pre-agreed seams. Run typechecking regularly, single
+test files regularly, and the full test suite once at the end. Once done, use
+$code-review to review the work. Commit your work to the branch above.
+
+Where a named skill is unavailable, do the same work without it: write the test
+before the code, and review your own diff against the ticket and the repository's
+coding standards before committing.
+
+Record acceptance criteria and final ticket state from what you observed: report
+failure rather than closing work that did not pass verification.
 
 Reconstruct context from repository instructions, this ticket and its comments, the
 parent spec, domain and architecture docs, and the relevant code. Touch no other
 ticket.
 ```
 
-Where the project provides a test-first or code-review skill the subagent can invoke,
-name it in the packet in place of the corresponding line. Never make launch depend on
-one being installed.
+Substitute the project's own names for `$tdd` and `$code-review` where they differ.
+Never make launch depend on either being installed: the packet already states the
+work to do without them.
 
 ### 4. Collect
 

@@ -60,6 +60,9 @@ Matt Pocock skills:
 - `setup-matt-pocock-skills` writes the `docs/agents/issue-tracker.md` and
   `docs/agents/triage-labels.md` this skill reads the tracker through.
 - `to-tickets` produces the dependency graph consumed by this skill.
+- `tdd` and `code-review` are named in each subagent's mandate. Neither is required:
+  the mandate states the same work in plain terms for a subagent that cannot invoke
+  them.
 
 ---
 
