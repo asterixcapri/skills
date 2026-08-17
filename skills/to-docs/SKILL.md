@@ -7,6 +7,8 @@ description: Analyze decisions made during implementation, review, or design wor
 
 Turn recent work into durable guidance without treating the session as a changelog.
 
+A decision that holds in another repository steers the agent everywhere, not only here: hand it to /to-skills instead of documenting it as a project rule.
+
 ## Phase 1: Propose
 
 Do not edit project documentation during this phase.

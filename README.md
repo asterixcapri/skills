@@ -111,6 +111,55 @@ Matt Pocock skill:
 
 ---
 
+### `to-skills`
+
+The counterpart of `to-docs` for the skills themselves. Where `to-docs` asks
+whether a decision deserves a place in this project's documentation,
+`to-skills` asks whether a behaviour observed during a session should change
+the skills that steer the agent in every project. The two split the same
+material along ownership: a rule that holds because of this repository's
+conventions is documentation, a procedure that holds in a repository you have
+never seen is a skill.
+
+The skill works from observed failure rather than from good intentions. A
+change earns its place when the agent ran under a given skill and the work
+still went wrong, or when the skill never entered the run at all. It then
+locates which of three surfaces failed:
+
+- **invocation** — the description fired on work the skill does not handle, or
+  stayed silent on work it does;
+- **execution** — the agent read the skill, followed it, and still chose wrong;
+- **absence** — no skill owned the procedure, and the agent reinvented it.
+
+Skills installed as dependencies are never edited in place, because the next
+install overwrites them: the outcome for those is an upstream patch or an owned
+skill that covers the gap. Proposals prefer sharpening or replacing text over
+appending it, since every line added to a skill is paid on every invocation, in
+every project that installs it.
+
+Use `to-skills` after a session where a skill misfired, failed to fire, or was
+followed to a wrong result, and when a procedure that keeps recurring across
+projects has no skill to own it.
+
+[View the skill](skills/to-skills/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill to-skills
+```
+
+#### Dependencies
+
+Matt Pocock skill:
+
+- `writing-for-agents` writes the approved skill changes.
+
+This repository's `to-docs` receives the decisions `to-skills` rejects as
+project-specific.
+
+---
+
 ## Discover skills
 
 List the skills published by this repository without installing them:
