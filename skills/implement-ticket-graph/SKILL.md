@@ -102,6 +102,10 @@ Base commit: <commit>
 Verification: <project commands>
 Completion report: outcome, commit, verification, dirty state, blockers
 
+Compare against the base commit with `git diff <base>` or
+`git checkout <base> -- <path>`: the stash is shared by every worktree of this
+repository, so it is not yours alone.
+
 Claim the ticket before writing code.
 
 Use /tdd where possible, at pre-agreed seams. Run typechecking regularly, single
