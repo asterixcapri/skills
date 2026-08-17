@@ -6,12 +6,12 @@ coding agents.
 
 ## Available skills
 
-### `execute-ticket-graph`
+### `implement-ticket-graph`
 
 Turn the dependency graph written by `to-tickets` into an implementation run. The
 skill reads every ticket and its blockers, calculates which tickets are ready, and
-launches one fresh subagent for each ready ticket. Every subagent invokes the
-project's existing `implement` workflow for exactly one ticket.
+launches one fresh subagent for each ready ticket. Each subagent implements exactly
+one ticket and owns that ticket's lifecycle.
 
 Independent tickets run concurrently in isolated Git worktrees, up to the
 parallelism limit defined by the user, repository, and host agent. Tickets with
@@ -28,35 +28,36 @@ A ──┬──> B ──┐
 
 the skill runs the tickets in three rounds:
 
-1. Run `implement` for A.
-2. After A integrates and passes verification, run `implement` for B and C in
-   parallel subagents.
-3. After both B and C integrate and pass verification, run `implement` for D.
+1. Implement A in one subagent.
+2. After A integrates and passes verification, implement B and C in parallel
+   subagents.
+3. After both B and C integrate and pass verification, implement D.
 
-`implement` remains the sole owner of each ticket's lifecycle, including claims,
-acceptance criteria, failures, and completion. The graph skill introduces no status
-convention of its own. After each round, it rereads the ticket system and recomputes
-the executable frontier instead of assuming that the graph is unchanged. Merge or
-verification failures keep downstream work blocked.
+Each ticket has exactly one writer: the subagent that implements it claims it,
+records its acceptance criteria, and marks its outcome. The orchestrator only reads
+the ticket system and introduces no status convention of its own. After each round it
+rereads the tracker and recomputes the executable frontier instead of assuming that
+the graph is unchanged. Merge or verification failures keep downstream work blocked.
 
-Use `execute-ticket-graph` when an implementation effort contains multiple tickets
-with blocking relationships and the project already defines its ticket-tracker and
-`implement` workflows.
+Use `implement-ticket-graph` when an implementation effort contains multiple tickets
+with blocking relationships and the project already defines its ticket-tracker
+workflow.
 
-[View the skill](skills/execute-ticket-graph/SKILL.md)
+[View the skill](skills/implement-ticket-graph/SKILL.md)
 
 #### Installation
 
 ```bash
-npx skills@latest add asterixcapri/skills --skill execute-ticket-graph
+npx skills@latest add asterixcapri/skills --skill implement-ticket-graph
 ```
 
 #### Dependencies
 
 Matt Pocock skills:
 
+- `setup-matt-pocock-skills` writes the `docs/agents/issue-tracker.md` and
+  `docs/agents/triage-labels.md` this skill reads the tracker through.
 - `to-tickets` produces the dependency graph consumed by this skill.
-- `implement` executes each ticket selected from the graph.
 
 ---
 
