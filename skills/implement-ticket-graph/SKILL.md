@@ -104,9 +104,9 @@ Completion report: outcome, commit, verification, dirty state, blockers
 
 Claim the ticket before writing code.
 
-Use $tdd where possible, at pre-agreed seams. Run typechecking regularly, single
+Use /tdd where possible, at pre-agreed seams. Run typechecking regularly, single
 test files regularly, and the full test suite once at the end. Once done, use
-$code-review to review the work. Commit your work to the branch above.
+/code-review to review the work. Commit your work to the branch above.
 
 Where a named skill is unavailable, do the same work without it: write the test
 before the code, and review your own diff against the ticket and the repository's
@@ -120,7 +120,7 @@ parent spec, domain and architecture docs, and the relevant code. Touch no other
 ticket.
 ```
 
-Substitute the project's own names for `$tdd` and `$code-review` where they differ.
+Substitute the project's own names for `/tdd` and `/code-review` where they differ.
 Never make launch depend on either being installed: the packet already states the
 work to do without them.
 
