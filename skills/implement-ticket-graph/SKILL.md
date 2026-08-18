@@ -78,7 +78,24 @@ For a dry run, print the frontier and simulated rounds, the ticket-to-subagent
 assignments and their packets, base commit, branch names, worktree paths, and the
 verification and integration commands. Write nothing.
 
-### 3. Launch one frontier
+### 3. Confirm the base and report the plan
+
+Check the main checkout with `git status --porcelain`. Worktrees branch from a commit,
+so uncommitted and untracked changes are invisible to every subagent: an effort whose
+spec or tickets are still unstaged would be implemented against a base that does not
+contain them. When the checkout is dirty, stop and ask the user how to proceed —
+commit, stash, or launch knowingly without those changes — and commit nothing on their
+behalf until they say so.
+
+Then, before the first launch, report the plan in one message: the effort and how many
+tickets are in scope, the rounds printed by `--rounds` with the tickets in each, the
+concurrency cap and where it came from, the resolved base commit, the branch and
+worktree naming, the verification and integration commands, and the retry limit and
+integration mode. Name any policy taken from a default rather than from repository
+instructions. Report, then proceed; wait for an answer only where the working-tree
+check raised a question.
+
+### 4. Launch one frontier
 
 Select eligible tickets up to the concurrency cap, assign each once, then reread it
 immediately before launch and proceed only while it is still eligible with satisfied
@@ -129,7 +146,7 @@ Substitute the project's own names for `/tdd` and `/code-review` where they diff
 Never make launch depend on either being installed: the packet already states the
 work to do without them.
 
-### 4. Collect
+### 5. Collect
 
 Wait for every subagent in the frontier, preserving successful sibling results when
 one fails. Each subagent is the authority on its own ticket, but accept its result
@@ -138,7 +155,7 @@ required verification, reported the exact commit hash, and left no unexplained d
 state. A stopped subagent is never a resolved ticket. Report any failure or
 escalation it left behind, and update nothing yourself.
 
-### 5. Integrate serially
+### 6. Integrate serially
 
 Keep the main checkout single-writer. Invoking this skill authorizes integration, so
 proceed without an approval checkpoint: integrate successful commits
@@ -155,7 +172,7 @@ combined state and record locally which commits integrated and which gates passe
 Repair no ticket state here. If the tracker does not show the expected result, report
 the discrepancy and keep downstream tickets blocked.
 
-### 6. Recompute
+### 7. Recompute
 
 Reread the tracker rather than mutating the old snapshot, then normalize, validate,
 and compute the next frontier. A ticket executed in this run satisfies its downstream
