@@ -41,6 +41,17 @@ the available subagent slots; retry limit `0`; automatic integration; and a
 successful sibling integrates even when another subagent fails, provided it is
 independently eligible.
 
+Place worktrees outside the working tree, at
+`<parent>/<repo>-worktrees/<effort>/<ticket-name>/`, and branch each as
+`ticket/<effort>/<ticket-name>`. A worktree inside the checkout leaves the main
+checkout dirty for the next round and is walked by the project's own tooling.
+`<ticket-name>` is the ticket's file name without its extension where the tracker
+stores tickets as files, and the ticket id otherwise, in both cases lowercased with
+every run of characters outside `[a-z0-9]` collapsed to `-`. Ticket numbering that
+restarts per effort makes the effort segment load-bearing: without it two efforts
+collide on the same path. The tracker's exact id still goes to the subagent; the
+derived name governs only paths and refs.
+
 ### 2. Build the graph
 
 List every implementation ticket in the effort and read enough of each to determine
@@ -171,6 +182,11 @@ Once the selected commits are in, run the full verification suite against their
 combined state and record locally which commits integrated and which gates passed.
 Repair no ticket state here. If the tracker does not show the expected result, report
 the discrepancy and keep downstream tickets blocked.
+
+Then remove the worktree of every ticket whose commit integrated and whose gates
+passed, and delete its branch once the integration target contains the commit. Keep
+the worktree of a failed or unintegrated ticket for inspection, and never force the
+removal of a dirty one: report it and leave it in place.
 
 ### 7. Recompute
 
