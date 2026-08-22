@@ -2,7 +2,8 @@
 
 Reusable agent skills distilled from production software-engineering work. The
 skills are small, focused, and designed to work across different projects and
-coding agents.
+coding agents. They build on and complement Matt Pocock's skills, extending that
+work with workflows designed to be used alongside them.
 
 ## Available skills
 
