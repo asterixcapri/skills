@@ -8,6 +8,37 @@ with workflows designed to be used alongside them.
 
 ## Available skills
 
+### `human-review`
+
+Accompany a human-led review of a PR, diff, branch, module, or files. You guide
+the discussion with questions about what to improve, remove, or redesign; the
+agent investigates the code, evaluates alternatives, and tracks agreed decisions
+separately from hypotheses. Existing automated reviews can inform the discussion.
+
+You decide when to close, pause, or move on. When requested, the skill prepares
+the selected intervention for `to-spec`, followed by `to-tickets`, preserving the
+rationale, behavior to protect, and open questions. For PRs, it separates changes
+needed for the current PR from improvements for later work.
+
+[View the skill](skills/human-review/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill human-review
+```
+
+#### Dependencies
+
+Matt Pocock skills, checked only when needed:
+
+- `codebase-design` supports questions about module and interface design.
+- `to-spec` and `to-tickets` handle the requested transition into planning.
+
+You can begin reviewing without the planning skills installed.
+
+---
+
 ### `implement-ticket-graph`
 
 Turn the dependency graph written by `to-tickets` into an implementation run. The
