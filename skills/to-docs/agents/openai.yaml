@@ -1,0 +1,4 @@
+interface:
+  display_name: "To Docs"
+  short_description: "Turn project decisions into documentation proposals"
+  default_prompt: "Use $to-docs to identify which decisions from this session deserve project guidance and propose changes for my approval."
