@@ -8,6 +8,45 @@ with workflows designed to be used alongside them.
 
 ## Available skills
 
+### `codebase-design-session`
+
+Design a software feature or architecture collaboratively through concrete use
+cases, API contracts, data flows, and module responsibilities. The agent proposes
+a design, walks through requests and consequential failure cases with you, and
+revises the contracts and interactions as decisions emerge.
+
+Questions focus on constraints that change the design. Routine technical choices
+come with recommendations, while reversible details can remain explicit working
+assumptions. The session produces a concise design synthesis and can continue
+into specification or implementation when requested. The planning path is
+`codebase-design-session` → `to-spec` → `to-tickets`: settled decisions feed the
+specification, which then feeds ticket creation in Matt Pocock's workflow.
+
+[View the skill](skills/codebase-design-session/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill codebase-design-session
+```
+
+#### Dependencies
+
+Matt Pocock skills, checked only when needed:
+
+- `codebase-design` provides the core module and interface design principles.
+- `domain-modeling`, `research`, and `prototype` support specific design questions.
+- `to-spec` and `to-tickets` handle requested transitions into planning.
+
+Discovery and use-case clarification can begin before installing `codebase-design`.
+Install it before the session's module and interface design analysis:
+
+```bash
+npx skills@latest add mattpocock/skills --skill codebase-design
+```
+
+---
+
 ### `human-review`
 
 Accompany a human-led review of a PR, diff, branch, module, or files. You guide
