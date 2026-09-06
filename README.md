@@ -12,10 +12,12 @@ with workflows designed to be used alongside them.
 
 Brainstorm a project's architecture as you would with a team of senior developers
 before implementation, using concrete use cases, API contracts, data flows, and
-module responsibilities. The agent actively
-brainstorms solutions, critiques both your ideas and its own, and explains weak
-points through concrete scenarios. It pairs criticism with better alternatives
-and their tradeoffs, then revises the contracts and interactions with you.
+module responsibilities. For each design point, the agent investigates the relevant
+code and proposes a concrete architectural change, citing the decisive files or
+symbols. It leads with the recommendation, expected benefit, and main tradeoff in
+a few lines, comparing alternatives when they materially change the decision.
+It critiques both your ideas and its own, then revises the contracts and
+interactions with you.
 The conversation follows ideas and discoveries; the numbered decision register
 supports it without turning each exchange into a questionnaire.
 

@@ -1,6 +1,6 @@
 ---
 name: architecture-brainstorming
-description: Run a collaborative architecture brainstorming session with the judgment of a senior development team before implementation. Use when the user wants to explore solutions, challenge design choices, and shape API contracts, data flows, and module responsibilities together.
+description: Analyze relevant code and propose concise architectural solutions in a collaborative brainstorming session before implementation. Use when the user wants to explore solutions, challenge design choices, and shape API contracts, data flows, and module responsibilities together.
 ---
 
 # Architecture Brainstorming
@@ -13,9 +13,11 @@ technical solutions and question the direction. Take responsibility for
 investigation and recommendations, drawing on the user's knowledge of intent
 and constraints that the available evidence cannot establish.
 
-Keep the exchange centered on the design under discussion. Contribute a concrete
-idea, critique, comparison, or revised sketch whenever it advances the discussion.
-Follow promising threads and revisit earlier proposals when insight changes them.
+Lead each substantive exchange with a concrete recommendation grounded in the
+current investigation. Focus on the few points that most affect the use case;
+explain each in a short paragraph or compact point card, expanding only when the
+user asks or the decision needs more detail. Follow promising threads and revisit
+earlier proposals when insight changes them.
 Weigh the engineering perspectives relevant to the decision, such as domain
 correctness, maintainability, operation, and caller experience, in your own voice.
 The senior-team framing describes the quality of reasoning and collaboration;
@@ -56,9 +58,20 @@ references from that skill only when the design question calls for them.
 
 ## Put a proposal on the table
 
+For each identified design point, inspect the relevant implementation and trace
+its callers, dependencies, and tests far enough to explain the current behavior
+and the consequence of changing it. Cite the decisive files or symbols. Resolve
+code-answerable questions through this investigation before presenting the point;
+when evidence is unavailable, state the gap and make the proposal provisional.
+For a new project, ground it in a concrete scenario and explicit assumptions.
+
 Propose the smallest coherent design that supports the use case, following the
 codebase's existing conventions. Start from behavior and derive the routes and
-code structure. Make the proposal inspectable with the artifacts that help:
+code structure. Name the responsibility, interface, or dependency that changes,
+where it belongs, and how the affected interaction would work afterward. Prefer
+changes that address an observed consequence or stated requirement; retain the
+current design when further abstraction has no demonstrated benefit. Make the
+proposal inspectable with the artifacts that help:
 
 - **Contract:** HTTP method and route, path/query/body attributes, which values
   come from the caller versus authentication or server state, required/optional
@@ -89,8 +102,9 @@ unclear ownership, excessive coupling, unnecessary complexity, or a mismatch wit
 the use case. Ground the criticism in code, a concrete scenario, or an explicit
 constraint; distinguish demonstrated defects from risks and preferences.
 
-Pair consequential criticism with a concrete repair or alternative. Explain what
-it improves, what tradeoff it introduces, and which option you recommend. Seek
+Pair consequential criticism with a concrete repair or alternative. Lead with
+the recommended solution, its expected benefit, and its main tradeoff. Compare
+another option only when it represents a materially different choice. Seek
 simplifications and stronger alternatives proactively, including flaws in your
 own first proposal. Agreement should follow evaluation; disagreement should earn
 its place through evidence rather than becoming a performance of skepticism.
@@ -148,8 +162,8 @@ show its number and your recommendation together. Use this compact format:
 
 ```text
 Point 3 — <title>
-Open issue: <what remains undecided and its concrete consequence>
-Recommendation: <proposed resolution, rationale, and main tradeoff>
+Evidence: <observed behavior and consequence; decisive file/symbol or scenario>
+Recommendation: <concrete architectural change, expected benefit, main tradeoff>
 To resolve: <evidence to obtain or decision needed from the user>
 ```
 

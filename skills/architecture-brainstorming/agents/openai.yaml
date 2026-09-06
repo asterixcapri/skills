@@ -1,4 +1,4 @@
 interface:
   display_name: "Architecture Brainstorming"
-  short_description: "Explore architecture, contracts, and design tradeoffs"
-  default_prompt: "Use $architecture-brainstorming to explore this design with me and resolve the open questions before implementation."
+  short_description: "Analyze code and propose concise architectural solutions"
+  default_prompt: "Use $architecture-brainstorming to investigate the relevant code, recommend concise architectural solutions, and resolve open design points with me before implementation."
