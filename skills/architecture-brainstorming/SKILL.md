@@ -1,9 +1,9 @@
 ---
-name: codebase-design-session
+name: architecture-brainstorming
 description: Run a collaborative architecture brainstorming session with the judgment of a senior development team before implementation. Use when the user wants to explore solutions, challenge design choices, and shape API contracts, data flows, and module responsibilities together.
 ---
 
-# Codebase Design Session
+# Architecture Brainstorming
 
 Work with the user as senior developers discussing a project's architecture
 before implementation. The central activity is collaborative brainstorming:
@@ -175,7 +175,7 @@ does not depend on it. Incidental coding details need not be invented as design
 questions. On pause, leave the unresolved points and proposed resolutions ready
 to resume. Answering one question is not agreement with the whole design.
 
-The planning path is `codebase-design-session` → `to-spec` → `to-tickets`.
+The planning path is `architecture-brainstorming` → `to-spec` → `to-tickets`.
 When the user requests that path and the readiness check passes, pass the design
 synthesis to `to-spec`, then pass the resulting specification to `to-tickets`.
 A request for the complete

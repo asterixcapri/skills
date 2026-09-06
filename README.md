@@ -8,7 +8,7 @@ with workflows designed to be used alongside them.
 
 ## Available skills
 
-### `codebase-design-session`
+### `architecture-brainstorming`
 
 Brainstorm a project's architecture as you would with a team of senior developers
 before implementation, using concrete use cases, API contracts, data flows, and
@@ -26,15 +26,15 @@ always presented with a recommended resolution, rationale, and tradeoff;
 all open design points must be resolved before specification, ticket creation,
 or implementation can begin. The session produces a concise design synthesis.
 The planning path is
-`codebase-design-session` → `to-spec` → `to-tickets`: settled decisions feed the
+`architecture-brainstorming` → `to-spec` → `to-tickets`: settled decisions feed the
 specification, which then feeds ticket creation in Matt Pocock's workflow.
 
-[View the skill](skills/codebase-design-session/SKILL.md)
+[View the skill](skills/architecture-brainstorming/SKILL.md)
 
 #### Installation
 
 ```bash
-npx skills@latest add asterixcapri/skills --skill codebase-design-session
+npx skills@latest add asterixcapri/skills --skill architecture-brainstorming
 ```
 
 #### Dependencies
