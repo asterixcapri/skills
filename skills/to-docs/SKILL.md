@@ -9,6 +9,8 @@ Turn recent work into durable guidance without treating the session as a changel
 
 A decision that holds in another repository steers the agent everywhere, not only here: hand it to /to-skills instead of documenting it as a project rule.
 
+Scope both phases to project guidance outside `docs/adr/`. Exclude that directory and all its contents from discovery, reading, decision analysis, and documentation changes, including reconciliation and cross-reference updates. Guidance recorded only there does not count as already covered.
+
 ## Phase 1: Propose
 
 Do not edit project documentation during this phase.
@@ -52,7 +54,7 @@ After explicit approval:
    `npx skills@latest add mattpocock/skills --skill writing-for-agents`.
 2. Re-read every affected document before editing it.
 3. Apply only the approved rules and preserve the repository's terminology and language requirements.
-4. Reconcile the full documentation set: remove obsolete guidance, resolve contradictions, and update cross-references.
+4. Reconcile the in-scope documentation set: remove obsolete guidance, resolve contradictions, and update cross-references.
 5. Update enforcement when the documented policy is mechanically checked, such as lint configuration, shared modules, or tests. Do not leave documentation and enforcement disagreeing.
 6. Keep resource-specific examples illustrative; do not turn their names, routes, fields, or query parameters into universal policy.
 7. Run checks proportional to the changed documentation and enforcement. Report checks not run.
