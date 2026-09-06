@@ -1,14 +1,31 @@
 ---
 name: codebase-design-session
-description: Collaboratively design a software feature or architecture through concrete use cases, API contracts, data flows, and module responsibilities. Use when the user wants to work out how code should fit together or explore a redesign through proposals and walkthroughs.
+description: Run a collaborative architecture brainstorming session with the judgment of a senior development team before implementation. Use when the user wants to explore solutions, challenge design choices, and shape API contracts, data flows, and module responsibilities together.
 ---
 
 # Codebase Design Session
 
-Build a concrete design with the user. Bring proposals they can react to, trace
-their consequences, and revise the design together. The agent owns investigation
-and technical recommendations; the user supplies product intent and constraints
-that cannot be established from the available evidence.
+Work with the user as senior developers discussing a project's architecture
+before implementation. The central activity is collaborative brainstorming:
+bring ideas, build on each other's reasoning, challenge weak choices, compare
+alternatives, and evolve a shared design. Both participants can contribute
+technical solutions and question the direction. Take responsibility for
+investigation and recommendations, drawing on the user's knowledge of intent
+and constraints that the available evidence cannot establish.
+
+Keep the exchange centered on the design under discussion. Contribute a concrete
+idea, critique, comparison, or revised sketch whenever it advances the discussion.
+Follow promising threads and revisit earlier proposals when insight changes them.
+Weigh the engineering perspectives relevant to the decision, such as domain
+correctness, maintainability, operation, and caller experience, in your own voice.
+The senior-team framing describes the quality of reasoning and collaboration;
+it does not require fictional participants or a scripted meeting.
+
+Use the workflow below to support that conversation. Numbered open points are
+its memory and transition check, not an agenda to exhaust on every turn. Keep
+the register current, surface the points relevant to the current discussion,
+and show the full open list at synthesis or a requested transition. Resolving
+points should improve the shared design, not merely complete a questionnaire.
 
 ## Ground the session
 
@@ -57,7 +74,7 @@ Select the useful artifacts rather than filling every category for every task.
 Use the equivalent entry point for jobs, events, libraries, or UI interactions.
 Keep sketches provisional and identify assumptions that could change their shape.
 
-## Walk through and revise
+## Critique, explore, and revise
 
 Trace one concrete interaction through the proposal. Follow the values as they
 are validated, transformed, passed between modules, and returned. Check that every
@@ -66,20 +83,35 @@ or edge cases that could invalidate the design. Discuss authorization,
 transactions, retries, concurrency, or compatibility where the use case makes
 them relevant.
 
-Recommend routine technical choices with their rationale. Bring alternatives
-when they have materially different consequences, and explain the tradeoff in
-terms of the use case. Reversible details can remain explicit working assumptions.
-Separate observed facts, proposals, user-agreed decisions, and deferred questions.
+Evaluate ideas on their merits regardless of who proposed them. When an idea is
+unsuitable, say so plainly and explain the specific weakness: a broken invariant,
+unclear ownership, excessive coupling, unnecessary complexity, or a mismatch with
+the use case. Ground the criticism in code, a concrete scenario, or an explicit
+constraint; distinguish demonstrated defects from risks and preferences.
+
+Pair consequential criticism with a concrete repair or alternative. Explain what
+it improves, what tradeoff it introduces, and which option you recommend. Seek
+simplifications and stronger alternatives proactively, including flaws in your
+own first proposal. Agreement should follow evaluation; disagreement should earn
+its place through evidence rather than becoming a performance of skepticism.
+
+Recommend routine technical choices with their rationale. During exploration,
+reversible details can remain explicit working assumptions. Separate observed
+facts, proposals, agreed decisions, and open questions. If the user knowingly
+accepts a tradeoff, record the consequence and work within that decision; revisit it when
+new evidence changes the assessment.
 
 Ask only the few questions needed to unblock the next useful revision, preferably
 one at a time. Attach questions to the concrete proposal and include a recommended
-answer when justified. Resolve unknown product rules before treating dependent
+answer with its rationale. Resolve unknown product rules before treating dependent
 behavior as agreed; continue independent design work while they remain open.
 
-Revise the affected contract, responsibilities, and flow together as answers
-arrive. Keep a compact decision record with rationale and significant rejected
-alternatives. Show changes that help the user evaluate the design. Use `grilling`
-only when the user explicitly requests its intensive questioning workflow.
+Revise the affected contract, responsibilities, and flow together as the discussion
+or investigation reveals improvements. Show the improved proposal rather than
+leaving the user with a list of objections. Keep a compact decision record with
+rationale and significant rejected alternatives. Show changes that help the user
+evaluate the design. Use `grilling` only when the user explicitly requests its
+intensive questioning workflow.
 
 ## Bring in focused skills
 
@@ -103,32 +135,64 @@ implementation without asking for it again.
 
 ## Synthesize or transition
 
-The design is ready for synthesis when the selected use case has a coherent
-contract and flow, responsibilities are assigned, consequential failure cases
-are addressed, and remaining uncertainties are explicitly resolved, deferred, or
-identified as blockers. Completeness is relative to the selected scope; incidental
-implementation details need not all be decided.
+Keep a concise synthesis available during exploration, including the proposed
+design, decisions and rationale, and an explicit numbered register of open points.
+Assign each point a stable, increasing number when first raised. Preserve its
+number across turns, summaries, and pauses; never renumber remaining points or
+reuse a resolved point's number. Interpret references such as "point 3" against
+this register. Retain resolved points with their resolution in the decision
+record, separate from the open list. A reopened point keeps its original number.
 
-Provide a concise synthesis of the proposed design, agreed decisions and their
-rationale, assumptions, and remaining questions. The user can continue, narrow
-the scope, pause, or move forward; answering one question is not agreement with
-the whole design. On pause, leave enough context to resume at the open point.
+Whenever presenting an unresolved point, including a single point or a recap,
+show its number and your recommendation together. Use this compact format:
+
+```text
+Point 3 — <title>
+Open issue: <what remains undecided and its concrete consequence>
+Recommendation: <proposed resolution, rationale, and main tradeoff>
+To resolve: <evidence to obtain or decision needed from the user>
+```
+
+When showing multiple points, present them in number order with these explicit
+labels so the renderer preserves their identifiers even when numbers have gaps.
+If evidence is missing, label the recommendation provisional and investigate what
+would validate it. Resolve technical facts through investigation; obtain the
+user's decision where product intent or a consequential tradeoff requires it.
+A recommendation alone does not settle a question that needs the user's answer.
+
+Before invoking `to-spec`, `to-tickets`, or starting implementation, check that
+the selected use case has a coherent contract and flow, responsibilities are
+assigned, consequential failure cases are addressed, and no numbered point
+remains open. Every identified design question must have a recorded resolution, and
+working assumptions must be validated or explicitly accepted as decisions.
+Deferred questions and questions labelled non-blocking still prevent transition.
+Do not use specification, ticket creation, or implementation to resolve them.
+
+While points remain open, continue investigation, proposals, and discussion.
+Only an explicit scope change by the user can move an unresolved point outside
+the session's scope; record that exclusion and check that the retained design
+does not depend on it. Incidental coding details need not be invented as design
+questions. On pause, leave the unresolved points and proposed resolutions ready
+to resume. Answering one question is not agreement with the whole design.
 
 The planning path is `codebase-design-session` → `to-spec` → `to-tickets`.
-When the user requests that path, pass the design synthesis to `to-spec`, then
-pass the resulting specification to `to-tickets`. A request for the complete
+When the user requests that path and the readiness check passes, pass the design
+synthesis to `to-spec`, then pass the resulting specification to `to-tickets`.
+A request for the complete
 sequence authorizes continuing through both steps without a new confirmation
 between them, subject to their applicable instructions and project configuration.
-Check each dependency when its step begins.
+Check each dependency and repeat the readiness check when its step begins. If a
+later step exposes a new open design point, pause that workflow and resolve the
+point through the same proposal-and-discussion process before continuing.
 
 Carry forward the problem, scope, contracts, responsibilities, interactions,
 agreed decisions and rationale, significant rejected alternatives, behavior to
-preserve, and verification approach. Preserve assumptions and deferred questions
-as such. Treat settled decisions as inputs; reopen them only if new evidence or
+preserve, verification approach, and explicit scope exclusions. Treat settled
+decisions as inputs; reopen them only if new evidence or
 a contradiction requires it. Let the receiving skill own its artifact format.
-Resolve blockers for each action before proceeding. If a blocker remains, keep
-the synthesis available and identify exactly what prevents the handoff.
+If any open point remains, keep the synthesis available and identify exactly
+what prevents the handoff, together with the recommended resolution.
 
-If the user requests implementation directly, carry the same context into the
-repository's implementation workflow. The session does not impose planning steps
-the user has chosen to skip.
+If the user requests implementation directly, apply the same readiness check
+before entering the repository's implementation workflow with the design context.
+Skipping planning steps does not bypass resolution of open design points.

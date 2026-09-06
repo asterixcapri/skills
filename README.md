@@ -10,15 +10,22 @@ with workflows designed to be used alongside them.
 
 ### `codebase-design-session`
 
-Design a software feature or architecture collaboratively through concrete use
-cases, API contracts, data flows, and module responsibilities. The agent proposes
-a design, walks through requests and consequential failure cases with you, and
-revises the contracts and interactions as decisions emerge.
+Brainstorm a project's architecture as you would with a team of senior developers
+before implementation, using concrete use cases, API contracts, data flows, and
+module responsibilities. The agent actively
+brainstorms solutions, critiques both your ideas and its own, and explains weak
+points through concrete scenarios. It pairs criticism with better alternatives
+and their tradeoffs, then revises the contracts and interactions with you.
+The conversation follows ideas and discoveries; the numbered decision register
+supports it without turning each exchange into a questionnaire.
 
 Questions focus on constraints that change the design. Routine technical choices
 come with recommendations, while reversible details can remain explicit working
-assumptions. The session produces a concise design synthesis and can continue
-into specification or implementation when requested. The planning path is
+assumptions during exploration. Every open point gets a stable number and is
+always presented with a recommended resolution, rationale, and tradeoff;
+all open design points must be resolved before specification, ticket creation,
+or implementation can begin. The session produces a concise design synthesis.
+The planning path is
 `codebase-design-session` → `to-spec` → `to-tickets`: settled decisions feed the
 specification, which then feeds ticket creation in Matt Pocock's workflow.
 
