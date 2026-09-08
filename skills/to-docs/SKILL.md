@@ -7,7 +7,7 @@ description: Analyze decisions made during implementation, review, or design wor
 
 Turn recent work into durable guidance without treating the session as a changelog.
 
-A decision that holds in another repository steers the agent everywhere, not only here: hand it to /to-skills instead of documenting it as a project rule.
+A procedure that applies across repositories belongs in a reusable skill. Report it as outside this workflow’s scope rather than documenting it as a project rule.
 
 Scope both phases to project guidance outside `docs/adr/`. Exclude that directory and all its contents from discovery, reading, decision analysis, and documentation changes, including reconciliation and cross-reference updates. Guidance recorded only there does not count as already covered.
 

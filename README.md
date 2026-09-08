@@ -8,49 +8,37 @@ with workflows designed to be used alongside them.
 
 ## Available skills
 
-### `architecture-brainstorming`
+### `architecture-alternatives`
 
-Brainstorm a project's architecture as you would with a team of senior developers
-before implementation, using concrete use cases, API contracts, data flows, and
-module responsibilities. For each design point, the agent investigates the relevant
-code and proposes a concrete architectural change, citing the decisive files or
-symbols. It leads with the recommendation, expected benefit, and main tradeoff in
-a few lines, comparing alternatives when they materially change the decision.
-It critiques both your ideas and its own, then revises the contracts and
-interactions with you.
-The conversation follows ideas and discoveries; the numbered decision register
-supports it without turning each exchange into a questionnaire.
+Start with an explicit `grilling` phase to establish the problem, intended
+behavior, constraints, and success criteria. After confirming the shared brief,
+produce exactly three architectures using `codebase-design`, leaving module
+responsibilities, interface shape, and seam placement open for the alternatives.
 
-Questions focus on constraints that change the design. Routine technical choices
-come with recommendations, while reversible details can remain explicit working
-assumptions during exploration. Every open point gets a stable number and is
-always presented with a recommended resolution, rationale, and tradeoff;
-all open design points must be resolved before specification, ticket creation,
-or implementation can begin. The session produces a concise design synthesis.
-The planning path is
-`architecture-brainstorming` → `to-spec` → `to-tickets`: settled decisions feed the
-specification, which then feeds ticket creation in Matt Pocock's workflow.
+Each proposal includes concrete client code for the same scenario: dependency
+setup, calls, result handling, and a meaningful failure. Interface contracts,
+behavior-test examples, and a comparison of depth, locality, testability, and
+adoption cost make the tradeoffs inspectable. The workflow ends with a
+recommendation; selection remains with the user.
 
-[View the skill](skills/architecture-brainstorming/SKILL.md)
+Use this skill to clarify requirements through an interview before comparing
+three concrete architectural alternatives.
+
+[View the skill](skills/architecture-alternatives/SKILL.md)
 
 #### Installation
 
 ```bash
-npx skills@latest add asterixcapri/skills --skill architecture-brainstorming
+npx skills@latest add asterixcapri/skills --skill architecture-alternatives
 ```
 
 #### Dependencies
 
-Matt Pocock skills, checked only when needed:
-
-- `codebase-design` provides the core module and interface design principles.
-- `domain-modeling`, `research`, and `prototype` support specific design questions.
-- `to-spec` and `to-tickets` handle requested transitions into planning.
-
-Discovery and use-case clarification can begin before installing `codebase-design`.
-Install it before the session's module and interface design analysis:
+Discovery can begin immediately. Matt Pocock's `grilling` is required before the
+interview; `codebase-design` is required before module and interface assessment:
 
 ```bash
+npx skills@latest add mattpocock/skills --skill grilling
 npx skills@latest add mattpocock/skills --skill codebase-design
 ```
 
@@ -84,66 +72,6 @@ Matt Pocock skills, checked only when needed:
 - `to-spec` and `to-tickets` handle the requested transition into planning.
 
 You can begin reviewing without the planning skills installed.
-
----
-
-### `implement-ticket-graph`
-
-Turn the dependency graph written by `to-tickets` into an implementation run. The
-skill reads every ticket and its blockers, calculates which tickets are ready, and
-launches one fresh subagent for each ready ticket. Each subagent receives a
-self-contained mandate — claim the ticket, work test-first, typecheck and test as it
-goes, review its own diff, commit, and record the outcome on the ticket — so the run
-depends on no skill it might be unable to invoke.
-
-Independent tickets run concurrently in isolated Git worktrees, up to the
-parallelism limit defined by the user, repository, and host agent. Tickets with
-unresolved blockers wait. When a subagent finishes, the skill collects its verified
-commit, integrates successful commits serially, verifies their combined state, and
-only then releases the next group of tickets.
-
-For example, given this graph:
-
-```text
-A ──┬──> B ──┐
-    └──> C ──┴──> D
-```
-
-the skill runs the tickets in three rounds:
-
-1. Implement A in one subagent.
-2. After A integrates and passes verification, implement B and C in parallel
-   subagents.
-3. After both B and C integrate and pass verification, implement D.
-
-Each ticket has exactly one writer: the subagent that implements it claims it,
-records its acceptance criteria, and marks its outcome. The orchestrator only reads
-the ticket system and introduces no status convention of its own. After each round it
-rereads the tracker and recomputes the executable frontier instead of assuming that
-the graph is unchanged. Merge or verification failures keep downstream work blocked.
-
-Use `implement-ticket-graph` when an implementation effort contains multiple tickets
-with blocking relationships and the project already defines its ticket-tracker
-workflow.
-
-[View the skill](skills/implement-ticket-graph/SKILL.md)
-
-#### Installation
-
-```bash
-npx skills@latest add asterixcapri/skills --skill implement-ticket-graph
-```
-
-#### Dependencies
-
-Matt Pocock skills:
-
-- `setup-matt-pocock-skills` writes the `docs/agents/issue-tracker.md` and
-  `docs/agents/triage-labels.md` this skill reads the tracker through.
-- `to-tickets` produces the dependency graph consumed by this skill.
-- `tdd` and `code-review` are named in each subagent's mandate. Neither is required:
-  the mandate states the same work in plain terms for a subagent that cannot invoke
-  them.
 
 ---
 
@@ -189,55 +117,6 @@ npx skills@latest add asterixcapri/skills --skill to-docs
 Matt Pocock skill:
 
 - `writing-for-agents` writes the approved documentation changes.
-
----
-
-### `to-skills`
-
-The counterpart of `to-docs` for the skills themselves. Where `to-docs` asks
-whether a decision deserves a place in this project's documentation,
-`to-skills` asks whether a behaviour observed during a session should change
-the skills that steer the agent in every project. The two split the same
-material along ownership: a rule that holds because of this repository's
-conventions is documentation, a procedure that holds in a repository you have
-never seen is a skill.
-
-The skill works from observed failure rather than from good intentions. A
-change earns its place when the agent ran under a given skill and the work
-still went wrong, or when the skill never entered the run at all. It then
-locates which of three surfaces failed:
-
-- **invocation** — the description fired on work the skill does not handle, or
-  stayed silent on work it does;
-- **execution** — the agent read the skill, followed it, and still chose wrong;
-- **absence** — no skill owned the procedure, and the agent reinvented it.
-
-Skills installed as dependencies are never edited in place, because the next
-install overwrites them: the outcome for those is an upstream patch or an owned
-skill that covers the gap. Proposals prefer sharpening or replacing text over
-appending it, since every line added to a skill is paid on every invocation, in
-every project that installs it.
-
-Use `to-skills` after a session where a skill misfired, failed to fire, or was
-followed to a wrong result, and when a procedure that keeps recurring across
-projects has no skill to own it.
-
-[View the skill](skills/to-skills/SKILL.md)
-
-#### Installation
-
-```bash
-npx skills@latest add asterixcapri/skills --skill to-skills
-```
-
-#### Dependencies
-
-Matt Pocock skill:
-
-- `writing-for-agents` writes the approved skill changes.
-
-This repository's `to-docs` receives the decisions `to-skills` rejects as
-project-specific.
 
 ---
 

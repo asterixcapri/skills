@@ -1,4 +1,0 @@
-interface:
-  display_name: "To Skills"
-  short_description: "Turn observed agent failures into skill improvements"
-  default_prompt: "Use $to-skills to analyze agent behavior from this session and propose portable skill improvements for my approval."
