@@ -1,4 +1,4 @@
 interface:
   display_name: "Human Review"
-  short_description: "Explore code and improvements in a human-led review"
-  default_prompt: "Use $human-review to help me review this code, investigate my questions, and discuss possible improvements."
+  short_description: "Judge PR properties and tradeoffs after AI review"
+  default_prompt: "Use $human-review to guide me through this PR after its AI code review, examine system properties and tradeoffs, and record my decisions."

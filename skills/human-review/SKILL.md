@@ -1,99 +1,117 @@
 ---
 name: human-review
-description: Accompany a human-led code review of a PR, diff, branch, module, or files. Use when the user wants to ask questions about existing code, explore simplifications or redesigns, and carry agreed decisions into to-spec and to-tickets. Automated review reports remain inputs to the discussion.
+description: Guide a human through a PR that has completed implementation and AI code review, using code evidence to judge system properties, architectural tradeoffs, and residual risks before acceptance.
 ---
 
 # Human Review
 
-The user steers the investigation. Help them understand the code, challenge
-assumptions, and decide what deserves to change. Keep exploration distinct from
-implementation and preserve enough reasoning to continue into planning.
+Help the human decide whether to accept a PR. This is the human judgment stage
+following grill-with-docs, to-spec, to-tickets, implement-spec or implement,
+and AI code review. Use the artifacts from that workflow as inputs; running
+those upstream skills is outside this review.
 
-## Establish the scope
+The unit of review is a system property, traced through whichever files provide
+evidence. Focus human attention on consequential decisions and uncertainty;
+reserve line-by-line inspection for paths where it helps establish a property.
 
-Use the target already given in the conversation. Ask for a missing target only
-when it prevents useful investigation. Read applicable repository guidance and
-give a brief orientation to the relevant responsibilities, entry points, and
-dependencies; move directly to an existing question when orientation adds little.
+## Prepare the PR review
 
-For a PR, read its description, base-to-head diff, and available review discussions.
-Establish which revision is being reviewed and distinguish it from local changes.
-Use existing automated findings, including code-review output, as leads to verify.
-If PR context is inaccessible, state the limitation and continue with available
-code without implying the discussions were reviewed.
+Use the PR already identified in the conversation. Ask for a missing target only
+when it blocks useful preparation. Read repository guidance, the PR description,
+base-to-head diff, linked spec and tickets, and available AI review results and
+review discussions. Record the base and head revisions and distinguish local
+changes from the PR being reviewed.
 
-## Follow the questions
+Summarize the intended behavior, the implemented approach, departures from the
+spec, and the disposition of relevant AI findings. Treat the previous review as
+an input to verify, not proof that a property holds. If an artifact is unavailable
+or a prior step is incomplete, record the gap and continue independent preparation;
+keep conclusions that depend on missing evidence explicitly unresolved.
 
-For each question, inspect the relevant implementation, callers, contracts, and
-tests far enough to assess the proposed change. Answer with concrete code
-references, distinguish evidence from inferred intent, and explain the consequences
-of keeping, simplifying, removing, or redesigning the code as relevant. Recommend
-an option and give its tradeoffs; challenge the user's hypothesis when the code
-does not support it. Keeping the current code is a valid conclusion.
-
-Use codebase-design when a question requires reasoning about module boundaries,
-interfaces, responsibilities, or test seams. At the first such question, check
-that the skill is available and read it. If unavailable, stop before that design
-analysis and give the exact command:
+Before assessing module depth, boundaries, interfaces, responsibilities, or test
+seams, check that codebase-design is available and read it. If unavailable, stop
+before that analysis and provide the exact installation command:
 
 ```bash
 npx skills@latest add mattpocock/skills --skill codebase-design
 ```
 
-Earlier orientation and independent review questions remain runnable. Reach for
-other skills only when a concrete question calls for their workflow; check their
-availability at that point and, if missing, provide their exact installation
-command before the dependent action.
+Earlier preparation and independent behavioral questions remain runnable.
 
-Raise closely related concerns when they affect the answer, while leaving the
-direction with the user. Keep the exchange conversational rather than turning it
-into an exhaustive audit or mandatory questionnaire.
+## Propose an agenda
 
-Maintain a compact record in the conversation of observations, hypotheses, agreed
-decisions with rationale, rejected alternatives, and open or deferred questions.
-Update it as conclusions change; show only useful updates during exploration.
-An exploratory question such as “could we delete this?” remains a hypothesis until
-the user agrees on an intervention. For PRs, distinguish changes needed to complete
-the PR from improvements for later work.
+Identify a short set of concrete properties affected by the PR, ordered by risk
+and impact. Explain why each deserves human attention. Consider:
 
-Review mode authorizes investigation and proposals. Change code when the user
-requests implementation, carrying forward any existing authorization; a speculative
-question alone does not authorize edits. Publishing PR comments or a formal review
-requires the user's request to do so.
+- **Problem fit:** implemented behavior serves the problem and acceptance criteria.
+- **Structure and change cost:** module depth, responsibilities, architectural
+  boundaries, interfaces, and seams hide complexity and localize likely changes.
+  Assess abstractions by the complexity they save, rather than their number.
+- **Behavior:** contracts, invariants, observable outcomes, error handling, and
+  partial failures preserve the promises that matter.
+- **High-risk paths:** relevant authorization, sensitive data, concurrency,
+  migrations, and irreversible operations have sufficient supporting evidence.
 
-## Let the user end or transition the review
+Express items as claims to investigate, such as “the domain remains independent
+of persistence” or “retrying this operation cannot duplicate a charge.” Select
+properties relevant to this PR; these categories are lenses, not a mandatory
+checklist. Include important risks the human has not already raised.
 
-Remain in review mode across turns until the user signals a transition. Answering
-the latest question or receiving an acknowledgment does not end the review. You
-may suggest a synthesis when the discussed points are resolved, but the user
-decides whether to close, pause, or continue exploring.
+Present the orientation and proposed agenda, then let the human choose or adjust
+the starting point. The human can reprioritize, add, deepen, or skip items.
 
-- **Close:** summarize the reviewed scope, agreed decisions and rationale, open
-  questions, and deferred work. Closure can leave uncertainties or no code changes.
-- **Pause:** leave a concise resumption note with the current question, relevant
-  code references, decisions so far, and the next investigation. Keep its status
-  explicitly unfinished.
-- **Move to planning:** prepare the selected intervention for to-spec with its
-  problem, intended benefit, agreed solution, alternatives rejected, behavior to
-  preserve, verification approach, and out-of-scope work. Separate independent
-  interventions; use the user's selection or ask which to advance if ambiguous.
-  Identify unresolved questions that block a buildable spec and resolve those
-  before proceeding. Preserve other uncertainties explicitly.
-- **Implement:** follow the user's requested implementation scope and the
-  repository's implementation workflow, using the review's agreed decisions.
+## Discuss one property at a time
 
-Closing the review does not automatically publish a spec or create tickets.
-When the user requests to-spec or to-tickets, check that skill's availability at
-the transition, then follow its instructions and project tracker configuration.
-If unavailable, stop before that action and provide the corresponding command:
+Trace the implementation, callers, dependencies, contracts, and relevant tests
+far enough to assess the claim. Seek counterexamples as well as supporting
+evidence: a dependency crossing the boundary, a path violating the invariant,
+or a failure leaking through the interface. Ground architectural explanations
+in actual code and distinguish test inspection from tests you executed.
 
-```bash
-npx skills@latest add mattpocock/skills --skill to-spec
-npx skills@latest add mattpocock/skills --skill to-tickets
-```
+Present a concise conclusion with precise code references, meaningful
+counterexamples or the limits of the search, tradeoffs, and residual uncertainty.
+Recommend whether to accept the current design or request an intervention, and
+explain why. Keeping the code is a valid outcome. Separate fixes needed for this
+PR from improvements suitable for later work.
 
-Keep the review context available through the requested planning steps so they
-can synthesize the discussion. Let those skills own spec and ticket formats;
-the review's synthesis is their input. A request to proceed through both steps
-is sufficient authorization to continue through that sequence under their
-applicable instructions.
+Invite the human's judgment on this property and wait before advancing. Follow
+requests for deeper evidence or alternative interpretations; challenge a
+hypothesis when the code contradicts it. The human need not personally inspect
+every supporting line, but must be able to assess the reasoning and its limits.
+An agent recommendation becomes a decision only when the human accepts it.
+Skipped or undecided properties remain open.
+
+## Keep a durable review record
+
+Maintain a short Markdown document using the repository's review-document
+convention, or `human-review/pr-<number>.md` when none exists. Reuse an existing
+record for this PR. Record:
+
+- PR identity, reviewed base and head revisions, input artifacts, and evidence gaps.
+- Each examined property, supporting and contrary evidence, the agent's
+  recommendation, the human's decision and rationale, and residual uncertainty.
+- Required interventions, deferred improvements, and open or skipped properties.
+- Overall human judgment on the PR, or an explicit indication that it is pending.
+
+Update the record as decisions change and link it for the human. Keep it concise;
+reference evidence instead of copying the conversation. Writing this local review
+record is part of the workflow. Publishing comments or a formal PR review requires
+an explicit request, honoring authorization already given in the conversation.
+
+## Close, pause, or request corrections
+
+Stay in review mode until the human chooses to close, pause, or implement.
+Acknowledging an individual point does not close the PR review. When the agenda
+is exhausted, propose an overall judgment and ask the human to decide whether
+the PR is acceptable, needs changes, or remains undecided.
+
+Closure may leave open properties, but the record must state them and the limits
+of the reviewed scope. A paused review remains unfinished and records the next
+property to investigate. Neither closure nor acceptance automatically publishes
+a review or merges the PR.
+
+Implement corrections only on explicit request, preserving existing authorization
+and following the repository's implementation workflow. After the PR changes,
+refresh the diff and evidence against its new revision. Reopen affected properties
+and identify new ones before relying on the earlier judgment; retain unaffected
+decisions with their provenance.

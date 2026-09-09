@@ -46,15 +46,19 @@ npx skills@latest add mattpocock/skills --skill codebase-design
 
 ### `human-review`
 
-Accompany a human-led review of a PR, diff, branch, module, or files. You guide
-the discussion with questions about what to improve, remove, or redesign; the
-agent investigates the code, evaluates alternatives, and tracks agreed decisions
-separately from hypotheses. Existing automated reviews can inform the discussion.
+Guide human judgment on a PR after `grill-with-docs`, `to-spec`, `to-tickets`,
+`implement-spec` or `implement`, and an AI code review. The agent uses the spec,
+tickets, diff, and prior review to propose an agenda ordered by risk and impact.
 
-You decide when to close, pause, or move on. When requested, the skill prepares
-the selected intervention for `to-spec`, followed by `to-tickets`, preserving the
-rationale, behavior to protect, and open questions. For PRs, it separates changes
-needed for the current PR from improvements for later work.
+Review system properties: problem fit, module depth, seams, interfaces,
+architectural boundaries, invariants, observable behavior, and high-risk paths.
+The agent presents code evidence, seeks counterexamples, and discusses one point
+at a time. You choose priorities and judge whether the tradeoffs are acceptable.
+
+A short Markdown review record preserves evidence, human decisions, requested
+interventions, and open questions. You decide when to close or pause; corrections
+and publishing a PR review require an explicit request. Changes to the PR reopen
+the affected properties for review.
 
 [View the skill](skills/human-review/SKILL.md)
 
@@ -66,12 +70,16 @@ npx skills@latest add asterixcapri/skills --skill human-review
 
 #### Dependencies
 
-Matt Pocock skills, checked only when needed:
+Matt Pocock's `codebase-design` is required before assessing module depth,
+boundaries, interfaces, responsibilities, or test seams:
 
-- `codebase-design` supports questions about module and interface design.
-- `to-spec` and `to-tickets` handle the requested transition into planning.
+```bash
+npx skills@latest add mattpocock/skills --skill codebase-design
+```
 
-You can begin reviewing without the planning skills installed.
+PR preparation and independent behavioral questions can begin without it.
+Upstream workflow artifacts are inputs; their producing skills are not runtime
+dependencies of this review.
 
 ---
 
