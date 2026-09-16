@@ -47,8 +47,13 @@ npx skills@latest add mattpocock/skills --skill codebase-design
 ### `human-review`
 
 Guide human judgment on a PR after `grill-with-docs`, `to-spec`, `to-tickets`,
-`implement-spec` or `implement`, and an AI code review. The agent uses the spec,
-tickets, diff, and prior review to propose an agenda ordered by risk and impact.
+`implement-spec` or `implement`, and an AI code review. The agent first explains
+the original problem, the improvement the PR pursues, and the caller-facing API
+before and after the change. Material architectural changes are shown with
+evidence-based before-and-after Mermaid or text diagrams.
+
+The agent then uses the spec, tickets, diff, and prior review to propose an agenda
+ordered by risk and impact.
 
 Review system properties: problem fit, module depth, seams, interfaces,
 architectural boundaries, invariants, observable behavior, and high-risk paths.

@@ -1,6 +1,6 @@
 ---
 name: human-review
-description: Guide a human through a PR that has completed implementation and AI code review, using code evidence to judge system properties, architectural tradeoffs, and residual risks before acceptance.
+description: Explain a PR's problem, intended improvement, architecture, and caller-facing API changes, then guide a human through evidence-based acceptance review.
 ---
 
 # Human Review
@@ -38,6 +38,36 @@ npx skills@latest add mattpocock/skills --skill codebase-design
 
 Earlier preparation and independent behavioral questions remain runnable.
 
+## Orient the human
+
+Before proposing the review agenda, explain the PR as a change from a concrete
+before-state to an intended after-state. Establish from the issue, spec, PR
+description, diff, and code:
+
+- the problem that existed before the PR, including who or what experienced it;
+- the outcome the PR is trying to improve and how the implementation pursues it;
+- the important behavior deliberately left unchanged;
+- any gap between the stated problem and what the diff actually delivers.
+
+Use plain language first, then the code vocabulary needed for precision. Do not
+substitute a file-by-file change summary for the problem and intended improvement.
+Mark an explanation as inferred when the motivation is not explicit in the
+available artifacts.
+
+Show the caller-facing API before and with the PR. Use representative call-site
+code for the same scenario on both sides, including setup or dependencies, the
+call, result handling, and a meaningful failure where these differ. Explain the
+migration effect on callers: what they must know, supply, handle, or can now
+ignore. Cover each materially distinct caller shape; if the public API and caller
+experience do not change, state that explicitly and cite the evidence.
+
+When the PR materially changes system structure, include a before-and-after
+Mermaid diagram, or an equally clear text diagram when Mermaid is unsuitable.
+Show affected modules, dependency direction, and the boundary or responsibility
+that moved. Follow the diagram with the architectural improvement being claimed,
+the complexity it removes or hides, and any new tradeoff it introduces. Base both
+states on repository evidence; label inferred edges or responsibilities.
+
 ## Propose an agenda
 
 Identify a short set of concrete properties affected by the PR, ordered by risk
@@ -57,8 +87,8 @@ of persistence” or “retrying this operation cannot duplicate a charge.” Se
 properties relevant to this PR; these categories are lenses, not a mandatory
 checklist. Include important risks the human has not already raised.
 
-Present the orientation and proposed agenda, then let the human choose or adjust
-the starting point. The human can reprioritize, add, deepen, or skip items.
+Present the proposed agenda after the orientation, then let the human choose or
+adjust the starting point. The human can reprioritize, add, deepen, or skip items.
 
 ## Discuss one property at a time
 
@@ -88,6 +118,8 @@ convention, or `human-review/pr-<number>.md` when none exists. Reuse an existing
 record for this PR. Record:
 
 - PR identity, reviewed base and head revisions, input artifacts, and evidence gaps.
+- The problem, intended improvement, caller-facing API comparison, and any
+  architectural before-and-after diagram used to orient the review.
 - Each examined property, supporting and contrary evidence, the agent's
   recommendation, the human's decision and rationale, and residual uncertainty.
 - Required interventions, deferred improvements, and open or skipped properties.
