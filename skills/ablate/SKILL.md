@@ -5,6 +5,8 @@ description: Reduce working code to its essential complexity by removing one lay
 
 # Ablate
 
+Inspired by [Salvatore Sanfilippo (antirez)](https://antirez.com/).
+
 Cut working code to the bone: remove the useless layers one at a time, and keep
 only what earns its place by breaking something real when it comes out.
 

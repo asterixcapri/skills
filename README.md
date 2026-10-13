@@ -10,6 +10,8 @@ with workflows designed to be used alongside them.
 
 ### `ablate`
 
+Inspired by [Salvatore Sanfilippo (antirez)](https://antirez.com/).
+
 Cut working code to its essential complexity. This skill first establishes a
 green signal — the test suite, build, or type checker — then removes one
 candidate layer at a time (pass-through wrappers, single-use abstractions,
