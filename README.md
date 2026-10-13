@@ -25,6 +25,18 @@ stays is only what earns its place by breaking something real when taken out.
 npx skills@latest add asterixcapri/skills --skill ablate
 ```
 
+#### Dependencies
+
+Matt Pocock's `codebase-design` is required before judging which candidate
+layers are accidental complexity to remove and which seams are load-bearing to
+keep:
+
+```bash
+npx skills@latest add mattpocock/skills --skill codebase-design
+```
+
+Establishing the green signal and signal-driven removals can begin without it.
+
 ---
 
 ### `architecture-alternatives`
