@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --background: #f5f6f8;
+      --ink: #202735;
+      --muted: #526075;
+      --accent: #245bc3;
+      --line: #dce1e9;
+      --soft: #eef2f8;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--background); color: var(--ink); line-height: 1.65; }
+    main { max-width: 68rem; margin: 3rem auto; padding: clamp(1.25rem, 4vw, 4rem); background: var(--paper); border: 1px solid var(--line); border-radius: 1rem; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    h1, h2, h3 { line-height: 1.2; text-wrap: balance; }
+    h1 { font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -.035em; margin: 0 0 1rem; }
+    h2 { font-size: 1.6rem; margin-top: 2.5rem; }
+    h3 { font-size: 1.15rem; margin-top: 1.75rem; }
+    p, li { max-width: 75ch; }
+    .intro { color: var(--muted); font-size: 1.15rem; margin-bottom: 0; }
+    a { color: var(--accent); text-underline-offset: .2em; overflow-wrap: anywhere; }
+    a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    code, pre { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; }
+    code { background: var(--soft); padding: .12em .3em; border-radius: .25rem; font-size: .9em; }
+    pre { padding: 1.2rem; background: var(--soft); border: 1px solid var(--line); border-radius: .6rem; overflow-x: auto; line-height: 1.5; }
+    pre code { background: transparent; padding: 0; }
+    figure { margin: 1.5rem 0; padding: 1.25rem; border: 1px solid var(--line); border-radius: .6rem; }
+    .diagram { overflow-x: auto; }
+    figure svg { display: block; max-width: 100%; height: auto; margin: auto; }
+    img { max-width: 100%; height: auto; }
+    figcaption { color: var(--muted); font-size: .9rem; margin-top: 1rem; }
+    .table-scroll { overflow-x: auto; margin: 1.5rem 0; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: .75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: var(--soft); font-weight: 650; }
+    blockquote, .note { border-left: 3px solid var(--accent); padding: .75rem 1rem; background: var(--soft); margin: 1.5rem 0; }
+    details { border: 1px solid var(--line); border-radius: .6rem; padding: 1rem; margin: 1rem 0; }
+    summary { cursor: pointer; font-weight: 650; }
+    footer { border-top: 1px solid var(--line); margin-top: 3rem; padding-top: 1rem; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 42rem) {
+      main { margin: 0; border: 0; border-radius: 0; }
+      figure { padding: .75rem; }
+      th, td { padding: .5rem; }
+    }
+    @media print {
+      body { background: white; }
+      main { max-width: none; margin: 0; padding: 0; border: 0; }
+      h1, h2, h3 { break-after: avoid; }
+      figure, tr { break-inside: avoid; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      .diagram, .table-scroll { overflow: visible; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>{{TITLE}}</h1>
+      <p class="intro">{{INTRO}}</p>
+    </header>
+    {{CONTENT}}
+  </main>
+</body>
+</html>

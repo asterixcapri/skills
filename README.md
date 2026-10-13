@@ -121,6 +121,76 @@ dependencies of this review.
 
 ---
 
+### `to-md`
+
+Save the current discussion or a specified topic as a standalone Markdown
+document. Preserve context, decisions, tradeoffs, and open questions. Use
+`show-me` only when a visual explanation helps, with Mermaid, trees, pseudocode,
+or diffs embedded as fenced blocks.
+
+[View the skill](skills/to-md/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill to-md
+```
+
+#### Dependencies
+
+[Dex Horthy's `show-me`](https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md)
+is required only before producing a visual explanation:
+
+```bash
+npx skills@latest add humanlayer/skills --skill show-me
+```
+
+Text-only documents can be produced without it. The default destination is
+`docs/explanations/<topic>.md`, unless the user or project specifies another.
+
+---
+
+### `to-html`
+
+Save the current discussion or a specified topic as one self-contained HTML
+document that opens locally and works offline. A common template provides
+responsive typography, tables, code, figures, and print styles; content determines
+the sections. CSS, scripts, and images are embedded, with no CDN dependencies.
+
+Use `show-me` only when a visual explanation helps. Mermaid diagrams are rendered
+to SVG during generation and embedded in the page, with no Mermaid runtime in
+the delivered file. The visual approach is also inspired by Matt Pocock's
+`improve-codebase-architecture`.
+
+[View the skill](skills/to-html/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill to-html
+```
+
+#### Dependencies
+
+[Dex Horthy's `show-me`](https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md)
+is required only before producing a visual explanation:
+
+```bash
+npx skills@latest add humanlayer/skills --skill show-me
+```
+
+Mermaid diagrams additionally require a working SVG renderer, such as
+[Mermaid CLI](https://github.com/mermaid-js/mermaid-cli):
+
+```bash
+npm install -g @mermaid-js/mermaid-cli
+```
+
+Text-only documents require neither dependency. The default destination is
+`docs/explanations/<topic>.html`, unless the user or project specifies another.
+
+---
+
 ### `to-docs`
 
 Turn decisions made during implementation, review, or design work into durable

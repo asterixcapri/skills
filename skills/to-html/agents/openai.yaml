@@ -1,0 +1,4 @@
+interface:
+  display_name: "To HTML"
+  short_description: "Save a discussion as a self-contained offline HTML file"
+  default_prompt: "Use $to-html to save this discussion as one self-contained HTML file that works offline, adding visuals where they help."
