@@ -8,6 +8,25 @@ with workflows designed to be used alongside them.
 
 ## Available skills
 
+### `ablate`
+
+Cut working code to its essential complexity. This skill first establishes a
+green signal — the test suite, build, or type checker — then removes one
+candidate layer at a time (pass-through wrappers, single-use abstractions,
+speculative extensibility, dead code, premature structure) and verifies
+behavior is preserved after each removal, reverting anything that breaks. What
+stays is only what earns its place by breaking something real when taken out.
+
+[View the skill](skills/ablate/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill ablate
+```
+
+---
+
 ### `architecture-alternatives`
 
 Start with an explicit `grilling` phase to establish the problem, intended
