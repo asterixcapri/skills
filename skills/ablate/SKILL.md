@@ -25,6 +25,24 @@ runnable meanwhile.
 
 ## Inventory the candidate layers
 
+The green signal decides what is behavior-preserving to remove, not which seams
+earn their keep for design reasons. Before judging candidates by structure,
+check that Matt Pocock's `codebase-design` skill is available and read its
+`SKILL.md`. If unavailable, stop before that judgment and give this exact
+installation command:
+
+```bash
+npx skills@latest add mattpocock/skills --skill codebase-design
+```
+
+The green-signal baseline and any removal the signal alone settles stay runnable
+without it. Use `codebase-design` as the model of essential structure: its
+vocabulary and deletion test separate accidental complexity to ablate from a
+load-bearing seam to keep. A shallow pass-through that adds no leverage is a
+candidate; a deep module — much behavior behind a small interface — or a seam
+something real varies across stays, even where removing it would keep the signal
+green.
+
 List the removable candidates, ordered safest-and-outermost to
 riskiest-and-most-load-bearing. Look for:
 
@@ -70,10 +88,13 @@ Keep these and treat them as load-bearing:
 
 - Anything whose removal changes observable behavior. A test whose expectation
   must change marks live code — stop and reconsider.
-- A seam with real second use: two or more realized implementations, or a
-  public API or extension point consumed from outside the repo. One in-repo
-  caller is not proof there is only one — check before collapsing a boundary
-  others may depend on.
+- A deep module or a seam with real second use, even when removing it would
+  keep the signal green. Apply `codebase-design`'s deletion test: if the same
+  complexity reappears across callers once it is gone, it was earning its keep,
+  not passing through. Two or more realized adapters mark a real seam; one is
+  only hypothetical. Keep a public API or extension point consumed from outside
+  the repo. One in-repo caller is not proof there is only one — check before
+  collapsing a boundary others may depend on.
 - Error handling, trust-boundary validation, and security or permission checks.
   A passing happy path does not prove these are unused; the signal may simply
   not cover the failure case. Keep them unless you can show the case is
