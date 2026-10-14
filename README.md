@@ -77,6 +77,25 @@ npx skills@latest add mattpocock/skills --skill codebase-design
 
 ---
 
+### `crystal-clear`
+
+Make responses and prose easier to understand and quicker to read. Lead with
+the main point, use plain language, and remove repetition while preserving
+the reasons, conditions, and details the reader needs to act.
+
+Use this skill when asking for a clearer explanation, a shorter response, or
+less verbose writing. It respects the requested language, audience, and format.
+
+[View the skill](skills/crystal-clear/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill crystal-clear
+```
+
+---
+
 ### `human-review`
 
 Guide human judgment on a PR after `grill-with-docs`, `to-spec`, `to-tickets`,
