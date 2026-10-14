@@ -1,5 +1,5 @@
 ---
-name: to-md
+name: to-markdown
 description: Save the current discussion or a user-specified topic as a standalone Markdown document, using show-me when a visual explanation helps. Use when the user wants a conversation, explanation, comparison, or decision captured in a Markdown file.
 ---
 

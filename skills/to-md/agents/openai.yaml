@@ -1,4 +1,0 @@
-interface:
-  display_name: "To Markdown"
-  short_description: "Save a discussion as a standalone Markdown document"
-  default_prompt: "Use $to-md to save this discussion as a standalone Markdown document, adding visuals where they help."

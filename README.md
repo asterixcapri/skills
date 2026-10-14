@@ -140,19 +140,19 @@ dependencies of this review.
 
 ---
 
-### `to-md`
+### `to-markdown`
 
 Save the current discussion or a specified topic as a standalone Markdown
 document. Preserve context, decisions, tradeoffs, and open questions. Use
 `show-me` only when a visual explanation helps, with Mermaid, trees, pseudocode,
 or diffs embedded as fenced blocks.
 
-[View the skill](skills/to-md/SKILL.md)
+[View the skill](skills/to-markdown/SKILL.md)
 
 #### Installation
 
 ```bash
-npx skills@latest add asterixcapri/skills --skill to-md
+npx skills@latest add asterixcapri/skills --skill to-markdown
 ```
 
 #### Dependencies
