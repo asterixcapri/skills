@@ -8,39 +8,6 @@ with workflows designed to be used alongside them.
 
 ## Available skills
 
-### `ablate`
-
-Inspired by [Salvatore Sanfilippo (antirez)](https://antirez.com/).
-
-Cut working code to its essential complexity. This skill first establishes a
-green signal — the test suite, build, or type checker — then removes one
-candidate layer at a time (pass-through wrappers, single-use abstractions,
-speculative extensibility, dead code, premature structure) and verifies
-behavior is preserved after each removal, reverting anything that breaks. What
-stays is only what earns its place by breaking something real when taken out.
-
-[View the skill](skills/ablate/SKILL.md)
-
-#### Installation
-
-```bash
-npx skills@latest add asterixcapri/skills --skill ablate
-```
-
-#### Dependencies
-
-Matt Pocock's `codebase-design` is required before judging which candidate
-layers are accidental complexity to remove and which seams are load-bearing to
-keep:
-
-```bash
-npx skills@latest add mattpocock/skills --skill codebase-design
-```
-
-Establishing the green signal and signal-driven removals can begin without it.
-
----
-
 ### `architecture-alternatives`
 
 Start with an explicit `grilling` phase to establish the problem, intended
@@ -73,25 +40,6 @@ interview; `codebase-design` is required before module and interface assessment:
 ```bash
 npx skills@latest add mattpocock/skills --skill grilling
 npx skills@latest add mattpocock/skills --skill codebase-design
-```
-
----
-
-### `crystal-clear`
-
-Make responses and prose easier to understand and quicker to read. Lead with
-the main point, use plain language, and remove repetition while preserving
-the reasons, conditions, and details the reader needs to act.
-
-Use this skill when asking for a clearer explanation, a shorter response, or
-less verbose writing. It respects the requested language, audience, and format.
-
-[View the skill](skills/crystal-clear/SKILL.md)
-
-#### Installation
-
-```bash
-npx skills@latest add asterixcapri/skills --skill crystal-clear
 ```
 
 ---
@@ -159,6 +107,84 @@ npx skills@latest add mattpocock/skills --skill codebase-design
 PR preparation and independent behavioral questions can begin without it.
 Upstream workflow artifacts are inputs; their producing skills are not runtime
 dependencies of this review.
+
+---
+
+### `ablate`
+
+Inspired by [Salvatore Sanfilippo (antirez)](https://antirez.com/).
+
+Cut working code to its essential complexity. This skill first establishes a
+green signal — the test suite, build, or type checker — then removes one
+candidate layer at a time (pass-through wrappers, single-use abstractions,
+speculative extensibility, dead code, premature structure) and verifies
+behavior is preserved after each removal, reverting anything that breaks. What
+stays is only what earns its place by breaking something real when taken out.
+
+[View the skill](skills/ablate/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill ablate
+```
+
+#### Dependencies
+
+Matt Pocock's `codebase-design` is required before judging which candidate
+layers are accidental complexity to remove and which seams are load-bearing to
+keep:
+
+```bash
+npx skills@latest add mattpocock/skills --skill codebase-design
+```
+
+Establishing the green signal and signal-driven removals can begin without it.
+
+---
+
+### `to-docs`
+
+Turn decisions made during implementation, review, or design work into durable
+project guidance. The skill separates project-wide rules from local fixes,
+already-documented guidance, and patterns that are not mature enough to adopt.
+It proposes documentation changes first and applies them only after explicit
+approval.
+
+Use `to-docs` when recent work has surfaced decisions that may deserve a place
+in project documentation, especially:
+
+- after implementing or reviewing a feature that introduced a reusable pattern;
+- after a design discussion resolved conventions, boundaries, or exceptions;
+- before adding lessons from a specific bug or route to `AGENTS.md`, coding
+  standards, architectural guidance, or other project-wide documentation;
+- when existing guidance may need refinement rather than another overlapping
+  rule.
+
+Applied repeatedly, `to-docs` improves the repository-level coding-agent
+harness: the instructions and documentation that steer the agent's behavior. It
+strengthens context engineering by turning decisions from real work into
+consistent, discoverable guidance, keeping the agent aligned with project
+conventions while preventing contradictory or overly specific rules from
+accumulating.
+
+The skill is most valuable when the difficult question is not how to write the
+documentation, but whether a decision is durable and general enough to document
+at all.
+
+[View the skill](skills/to-docs/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill to-docs
+```
+
+#### Dependencies
+
+Matt Pocock skill:
+
+- `writing-for-agents` writes the approved documentation changes.
 
 ---
 
@@ -232,48 +258,22 @@ Text-only documents require neither dependency. The default destination is
 
 ---
 
-### `to-docs`
+### `crystal-clear`
 
-Turn decisions made during implementation, review, or design work into durable
-project guidance. The skill separates project-wide rules from local fixes,
-already-documented guidance, and patterns that are not mature enough to adopt.
-It proposes documentation changes first and applies them only after explicit
-approval.
+Make responses and prose easier to understand and quicker to read. Lead with
+the main point, use plain language, and remove repetition while preserving
+the reasons, conditions, and details the reader needs to act.
 
-Use `to-docs` when recent work has surfaced decisions that may deserve a place
-in project documentation, especially:
+Use this skill when asking for a clearer explanation, a shorter response, or
+less verbose writing. It respects the requested language, audience, and format.
 
-- after implementing or reviewing a feature that introduced a reusable pattern;
-- after a design discussion resolved conventions, boundaries, or exceptions;
-- before adding lessons from a specific bug or route to `AGENTS.md`, coding
-  standards, architectural guidance, or other project-wide documentation;
-- when existing guidance may need refinement rather than another overlapping
-  rule.
-
-Applied repeatedly, `to-docs` improves the repository-level coding-agent
-harness: the instructions and documentation that steer the agent's behavior. It
-strengthens context engineering by turning decisions from real work into
-consistent, discoverable guidance, keeping the agent aligned with project
-conventions while preventing contradictory or overly specific rules from
-accumulating.
-
-The skill is most valuable when the difficult question is not how to write the
-documentation, but whether a decision is durable and general enough to document
-at all.
-
-[View the skill](skills/to-docs/SKILL.md)
+[View the skill](skills/crystal-clear/SKILL.md)
 
 #### Installation
 
 ```bash
-npx skills@latest add asterixcapri/skills --skill to-docs
+npx skills@latest add asterixcapri/skills --skill crystal-clear
 ```
-
-#### Dependencies
-
-Matt Pocock skill:
-
-- `writing-for-agents` writes the approved documentation changes.
 
 ---
 
