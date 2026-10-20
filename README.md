@@ -96,6 +96,28 @@ npx skills@latest add asterixcapri/skills --skill crystal-clear
 
 ---
 
+### `explain-changes`
+
+Explain what changed, why it matters, and how behavior differs before and after.
+Accept local edits (staged, unstaged, and new files), a PR, commits, a branch,
+two tags or versions, or a supplied patch. Establish the comparison first, then
+trace the diff through relevant code, callers, tests, and documentation.
+
+Group the explanation by behavior or purpose, with concrete before-and-after
+examples and code references. Distinguish stated intent from implemented
+behavior and make evidence gaps explicit. Deliver the explanation in the
+conversation, in the user's language, with detail proportional to the change.
+
+[View the skill](skills/explain-changes/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill explain-changes
+```
+
+---
+
 ### `human-review`
 
 Guide human judgment on a PR after `grill-with-docs`, `to-spec`, `to-tickets`,
