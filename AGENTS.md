@@ -7,6 +7,8 @@ This repository publishes agent skills through skills.sh.
 - Store every published skill in `skills/<skill-name>/`.
 - Use lowercase kebab-case and make the directory name match the frontmatter
   `name`.
+- Include `agents/openai.yaml` in every published skill, with a display name,
+  short description, and default prompt that mentions `$<skill-name>`.
 - Keep third-party skills installed for this project in `.agents/skills/`; do
   not publish them from `skills/`.
 - For an installable skill dependency invoked at runtime, check availability at

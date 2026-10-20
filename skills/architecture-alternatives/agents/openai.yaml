@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture Alternatives"
+  short_description: "Compare three architectures after clarifying requirements"
+  default_prompt: "Use $architecture-alternatives to clarify this problem and compare three architectures with client code and a recommendation."

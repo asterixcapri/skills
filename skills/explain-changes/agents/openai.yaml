@@ -1,0 +1,4 @@
+interface:
+  display_name: "Explain Changes"
+  short_description: "Explain changes and their before-and-after behavior"
+  default_prompt: "Use $explain-changes to explain what changed, why it matters, and how behavior differs before and after."

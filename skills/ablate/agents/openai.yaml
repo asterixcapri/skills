@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ablate"
+  short_description: "Remove unnecessary layers while preserving behavior"
+  default_prompt: "Use $ablate to simplify this working code one layer at a time, checking that behavior stays the same."

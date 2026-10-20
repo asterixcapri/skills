@@ -1,0 +1,4 @@
+interface:
+  display_name: "Crystal Clear"
+  short_description: "Make responses and prose clearer and more concise"
+  default_prompt: "Use $crystal-clear to make this text clearer and more concise while preserving its meaning."
