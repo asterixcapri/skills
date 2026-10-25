@@ -1,14 +1,15 @@
 ---
 name: ablate
-description: Reduce working code to its essential complexity by removing one layer at a time and checking that behavior is preserved after each removal, keeping only what breaks the build, types, or tests when taken out. Use when the user wants to strip over-engineering, dead abstractions, and speculative layers from code that already works.
+description: Propose ways to simplify working code, recommend which layers to remove or keep, and ask for approval before applying changes. After approval, remove one layer at a time and check that behavior is preserved. Use when the user wants to strip over-engineering, dead abstractions, and speculative layers from code that already works.
 ---
 
 # Ablate
 
 Inspired by [Salvatore Sanfilippo (antirez)](https://antirez.com/).
 
-Cut working code to the bone: remove the useless layers one at a time, and keep
-only what earns its place by breaking something real when it comes out.
+Find the layers working code can do without, recommend concrete removals, and
+ask the user to approve the proposal before changing code. Apply approved
+removals one at a time, preserving behavior after each step.
 
 Ablation is subtraction under a safety net, not redesign. Observable behavior
 stays identical from the first removal to the last. If removing something would
@@ -20,10 +21,10 @@ Run the signal that will prove each removal preserves behavior — the test
 suite, the build, the type checker, a linter, or a reproducible run of the
 affected path — and confirm it is green before you remove anything.
 
-No signal for the code in scope is the first finding. Either add a
-characterization test pinning the current behavior of what you will touch, or
-stop and tell the user a signal is needed. Keep any independent exploration
-runnable meanwhile.
+No signal for the code in scope is the first finding. Include a characterization
+test pinning the current behavior in the proposal, and make removals depend on
+that test passing. Keep independent exploration runnable; adding the test waits
+for approval along with the removals.
 
 ## Inventory the candidate layers
 
@@ -37,8 +38,8 @@ installation command:
 npx skills@latest add mattpocock/skills --skill codebase-design
 ```
 
-The green-signal baseline and any removal the signal alone settles stay runnable
-without it. Use `codebase-design` as the model of essential structure: its
+The green-signal baseline and investigation the signal alone settles stay
+runnable without it. Use `codebase-design` as the model of essential structure: its
 vocabulary and deletion test separate accidental complexity to ablate from a
 load-bearing seam to keep. A shallow pass-through that adds no leverage is a
 candidate; a deep module — much behavior behind a small interface — or a seam
@@ -64,9 +65,30 @@ riskiest-and-most-load-bearing. Look for:
 - **Redundant guarding:** caches nothing reads twice, re-validation of
   already-validated data, defensive checks for states that cannot occur.
 
-## Ablate one candidate at a time
+## Propose changes and recommend what to do
 
-Work the list in order. For each candidate:
+Present a reviewable proposal in the conversation before editing files or
+trying removals. For each candidate, include:
+
+- The affected files and symbols, with a concrete before-and-after snippet or
+  proposed diff showing the simplification.
+- A recommendation to remove, keep, or defer it, with the evidence and design
+  tradeoff behind that recommendation.
+- The expected benefit, behavior at risk, and checks that would validate the
+  change. Distinguish observed evidence from assumptions still to verify.
+
+Recommend an ordered subset to apply first, explaining why it is worth doing.
+If no removal is justified, recommend keeping the code and explain why.
+
+Ask the user to approve that concrete proposal or select a subset, then wait.
+Invoking this skill alone is not approval to edit. Apply only changes covered
+by explicit approval of the proposal; reuse approval already given for that
+same scope. Include any prerequisite test additions in the approval scope.
+
+## After approval, ablate one candidate at a time
+
+Work the approved list in order, establishing any missing green signal first.
+For each candidate:
 
 1. Remove it — delete it, or inline it into its single call site.
 2. Re-run the signal.
@@ -80,9 +102,10 @@ it into the caller rather than leave a hole.
 ## Re-measure and repeat
 
 Each kept removal shrinks the surface for the next, so re-scan: collapsing one
-wrapper often leaves its now-single caller inlineable in turn. Continue until no
-candidate comes out without turning the signal red. That red boundary is the
-essential complexity — stop there.
+wrapper often leaves its now-single caller inlineable in turn. Continue within
+the approved scope. Present newly discovered removals as a follow-up proposal
+and wait for approval before applying them. A red signal stops that removal;
+record what it protects rather than changing behavior to make the removal pass.
 
 ## What not to ablate
 
@@ -104,9 +127,10 @@ Keep these and treat them as load-bearing:
 - A layer with a stated, documented reason (performance isolation, an
   architectural boundary). Flag it to the user rather than remove it yourself.
 
-## Report what came out
+## Report the outcome
 
-Summarize: what was ablated and why it was safe, what stayed and the concrete
-thing that broke when you tried to remove it, and the net reduction in lines,
-files, and dependencies. Behavior matches where you started — say so, and point
-at the still-green signal as the proof.
+Before approval, finish with the proposal, recommendation, and approval request.
+After implementation, summarize what was ablated, what stayed and why, and the
+net reduction in lines, files, and dependencies. Report the checks run and their
+results, including coverage gaps; distinguish failed removal attempts from
+layers retained on inspection alone.

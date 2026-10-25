@@ -114,12 +114,14 @@ dependencies of this review.
 
 Inspired by [Salvatore Sanfilippo (antirez)](https://antirez.com/).
 
-Cut working code to its essential complexity. This skill first establishes a
-green signal — the test suite, build, or type checker — then removes one
-candidate layer at a time (pass-through wrappers, single-use abstractions,
-speculative extensibility, dead code, premature structure) and verifies
-behavior is preserved after each removal, reverting anything that breaks. What
-stays is only what earns its place by breaking something real when taken out.
+Cut working code to its essential complexity. This skill establishes a green
+signal — the test suite, build, or type checker — and proposes concrete
+simplifications, recommending what to remove, keep, or defer. You approve the
+proposal or select a subset before any edits, including prerequisite tests.
+
+After approval, it removes one candidate layer at a time and checks that
+behavior is preserved, reverting anything that breaks. New candidates beyond
+the approved scope return to you as a follow-up proposal.
 
 [View the skill](skills/ablate/SKILL.md)
 
@@ -139,7 +141,8 @@ keep:
 npx skills@latest add mattpocock/skills --skill codebase-design
 ```
 
-Establishing the green signal and signal-driven removals can begin without it.
+Establishing the green signal and signal-driven investigation can begin without
+it. Applying changes requires approval of the concrete proposal.
 
 ---
 
