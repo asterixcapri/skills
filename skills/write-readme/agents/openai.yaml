@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write README"
+  short_description: "Explain software through clear features and examples"
+  default_prompt: "Use $write-readme to write or revise this project's README with clear feature explanations, concrete examples, and only the essentials needed to get started."

@@ -280,6 +280,28 @@ npx skills@latest add asterixcapri/skills --skill crystal-clear
 
 ---
 
+### `write-readme`
+
+Write a software README that explains what people can do with the project,
+with concrete examples and a short path to a first useful result. Ground feature
+claims and usage examples in the actual project, using plain language and only
+the detail readers need to choose and start using the software.
+
+Use this skill to create a README or simplify one that reads like a technical
+manual. Start with an introduction, features, installation or access, a quick
+start, and further usage examples where useful. Combine sections for small
+projects and link to deeper documentation when needed.
+
+[View the skill](skills/write-readme/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill write-readme
+```
+
+---
+
 ## Discover skills
 
 List the skills published by this repository without installing them:
