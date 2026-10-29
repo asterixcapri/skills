@@ -280,6 +280,27 @@ npx skills@latest add asterixcapri/skills --skill crystal-clear
 
 ---
 
+### `honest`
+
+Give candid, evidence-based judgments on ideas, decisions, and work. Challenge
+weak premises, distinguish facts from preferences, and explain errors directly.
+Agreement should follow the evidence; disagreement should identify a concrete
+problem and, where useful, a better option.
+
+Use this skill when asking for brutal honesty or feedback without automatic
+approval. It revises conclusions when the evidence changes and respects your
+decision after explaining the tradeoffs.
+
+[View the skill](skills/honest/SKILL.md)
+
+#### Installation
+
+```bash
+npx skills@latest add asterixcapri/skills --skill honest
+```
+
+---
+
 ### `write-readme`
 
 Write a software README that explains what people can do with the project,

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Honest"
+  short_description: "Give candid feedback grounded in evidence"
+  default_prompt: "Use $honest to assess this candidly, challenge weak assumptions, and explain your judgment without automatic agreement."
