@@ -6,6 +6,30 @@ coding agents. They build on and complement
 [Matt Pocock's skills](https://github.com/mattpocock/skills), extending that work
 with workflows designed to be used alongside them.
 
+## Install as a plugin
+
+The `asterixcapri` plugin bundles all skills in this repository. It is listed in
+the private `caprionlinesrl` marketplace; access to that marketplace is required.
+
+In Claude Code:
+
+```text
+/plugin marketplace add caprionlinesrl/agent-plugins
+/plugin install asterixcapri@caprionlinesrl
+```
+
+Start a new session, then invoke a skill such as `/asterixcapri:explain-changes`.
+
+For Codex, add the same marketplace from your terminal:
+
+```bash
+codex plugin marketplace add caprionlinesrl/agent-plugins
+```
+
+Install `asterixcapri` from the plugin browser and start a new chat. External
+skill dependencies are not bundled; see each skill's dependencies below.
+Individual installation through `skills.sh` remains available.
+
 ## Available skills
 
 ### `architecture-alternatives`

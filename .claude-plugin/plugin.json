@@ -1,0 +1,11 @@
+{
+  "name": "asterixcapri",
+  "version": "0.1.0",
+  "description": "Reusable agent skills for software engineering, architecture, reviews, and documentation.",
+  "author": {
+    "name": "Alessandro Astarita"
+  },
+  "homepage": "https://github.com/asterixcapri/skills",
+  "repository": "https://github.com/asterixcapri/skills",
+  "license": "MIT"
+}
